@@ -72,38 +72,24 @@ class ProfileHeaderView: UIView {
         return textField
     }()
     
-    @objc func buttonPressed() {
-        statusLabel.text = statusText
-        print("Текущий статус: \(statusText)")
-    }
-    
     private var statusText: String = ""
     
-    @objc func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text ?? ""
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private lazy var newButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Новая кнопка", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.shadowOffset = CGSize(width: 4, height: 4)
-        button.layer.shadowRadius = 4.0
-        button.layer.shadowOpacity = 0.7
-        
-        return button
-    }()
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     
-    private func setupContraints() {
+    private func setupUI() {
         addSubview(avatarImageView)
         addSubview(fullNameLabel)
         addSubview(statusLabel)
         addSubview(setStatusButton)
         addSubview(statusTextField)
-        addSubview(newButton)
             
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -127,23 +113,18 @@ class ProfileHeaderView: UIView {
             
             statusLabel.bottomAnchor.constraint(equalTo: statusTextField.topAnchor, constant: -10),
             statusLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            statusLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            
-            newButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            newButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            newButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            statusLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
         
         }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupContraints()
-        translatesAutoresizingMaskIntoConstraints = false
+    @objc func buttonPressed() {
+        statusLabel.text = statusText
+        print("Текущий статус: \(statusText)")
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    @objc func statusTextChanged(_ textField: UITextField) {
+        statusText = textField.text ?? ""
     }
     
 }

@@ -5,15 +5,6 @@ class ProfileViewController: UIViewController {
     
     private let profileHeaderView = ProfileHeaderView()
     
-    private func showHeaderView() {        
-        NSLayoutConstraint.activate([
-            profileHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            profileHeaderView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            profileHeaderView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            profileHeaderView.heightAnchor.constraint(equalToConstant:220)
-        ])
-    }
-    
     private lazy var newButton: UIButton = {
         let button = UIButton()
         button.setTitle("Новая кнопка", for: .normal)
@@ -28,23 +19,26 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    private func setupContraintsButton() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemGray4
+        view.addSubview(profileHeaderView)
+        view.addSubview(newButton)
+        setupUI()
+    }
+
+    private func setupUI() {
         NSLayoutConstraint.activate([
+            profileHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            profileHeaderView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            profileHeaderView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            profileHeaderView.heightAnchor.constraint(equalToConstant:220),
+            
             newButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             newButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             newButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .systemGray4
-        view.addSubview(profileHeaderView)
-        showHeaderView()
-        
-        view.addSubview(newButton)
-        setupContraintsButton()
-    }
-
 }
