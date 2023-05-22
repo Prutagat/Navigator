@@ -25,8 +25,8 @@ class LogInViewController: UIViewController {
     }()
 
     private let logoImageView: UIImageView = {
-        let image = UIImage(named: "Logo")
-        let imageView = UIImageView(image: image!)
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "logo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageView
@@ -54,7 +54,7 @@ class LogInViewController: UIViewController {
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         button.setTitle("Войти", for: .normal)
-        button.setBackgroundImage(UIImage(named:"Blue_pixel"), for: .normal)
+        button.setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
         button.clipsToBounds = true
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -136,7 +136,7 @@ class LogInViewController: UIViewController {
         textField.clipsToBounds = true
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.autocapitalizationType = .none
-        textField.tintColor = UIColor(named: "New color set")
+        textField.tintColor = UIColor(named: "new_color_set")
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.keyboardType = UIKeyboardType.default

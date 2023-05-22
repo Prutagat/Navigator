@@ -10,8 +10,8 @@ class ProfileHeaderView: UIView {
     // MARK: - Subviews
     
     private let avatarImageView: UIImageView = {
-        let image = UIImage(named: "Profile picture")
-        let imageView = UIImageView(image: image!)
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -45,7 +45,6 @@ class ProfileHeaderView: UIView {
         button.setTitle("Показать статус", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
         button.layer.cornerRadius = 4
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
