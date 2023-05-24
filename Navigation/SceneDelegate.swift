@@ -22,9 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         feedViewController.title = "Лента"
         feedViewController.view.backgroundColor = .systemOrange
            
-        let profileViewController = ProfileViewController()
-        profileViewController.title = "Профиль"
-        //profileViewController.view.backgroundColor = .systemYellow
+        let profileViewController = LogInViewController()
+//        profileViewController.title = "Профиль"
         
         let tabBarController = UITabBarController()
         
