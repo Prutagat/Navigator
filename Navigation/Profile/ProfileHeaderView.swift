@@ -3,9 +3,15 @@ import UIKit
 
 class ProfileHeaderView: UIView {
     
+    // MARK: - statusText
+    
+    private var statusText: String = ""
+    
+    // MARK: - Subviews
+    
     private let avatarImageView: UIImageView = {
-        let image = UIImage(named: "profile picture")
-        let imageView = UIImageView(image: image!)
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -38,7 +44,7 @@ class ProfileHeaderView: UIView {
         let button = UIButton()
         button.setTitle("Показать статус", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 4
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -58,12 +64,13 @@ class ProfileHeaderView: UIView {
         textField.font = UIFont.systemFont(ofSize: 15)
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 12
+        textField.clipsToBounds = true
         textField.placeholder = "Введите статус"
         textField.backgroundColor = .white
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 40))
-        textField.leftViewMode = .always
-
+        
         textField.addTarget(
             self,
             action: #selector(statusTextChanged),
@@ -72,7 +79,7 @@ class ProfileHeaderView: UIView {
         return textField
     }()
     
-    private var statusText: String = ""
+    // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -83,6 +90,19 @@ class ProfileHeaderView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    // MARK: - Actions
+    
+    @objc func buttonPressed() {
+        statusLabel.text = statusText
+        print("Текущий статус: \(statusText)")
+    }
+    
+    @objc func statusTextChanged(_ textField: UITextField) {
+        statusText = textField.text ?? ""
+    }
+    
+    // MARK: - Private
     
     private func setupUI() {
         addSubview(avatarImageView)
@@ -117,14 +137,5 @@ class ProfileHeaderView: UIView {
         ])
         
         }
-    
-    @objc func buttonPressed() {
-        statusLabel.text = statusText
-        print("Текущий статус: \(statusText)")
-    }
-    
-    @objc func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text ?? ""
-    }
     
 }
