@@ -11,7 +11,7 @@ class ProfileHeaderView: UIView {
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "profile_picture")
+        imageView.image = UIImage(named: "Profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -23,7 +23,7 @@ class ProfileHeaderView: UIView {
     
     private let fullNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Утка Уткович"
+        label.text = "Скрудж Макдак"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         

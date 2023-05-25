@@ -78,3 +78,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 struct Post {
     var title: String
 }
+
+struct PostModel {
+    var author: String
+    var description: String
+    var image: String
+    var likes: Int
+    var views: Int
+}
