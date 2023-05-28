@@ -23,7 +23,7 @@ class ProfileHeaderView: UIView {
     
     private let fullNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Утка Уткович"
+        label.text = "Скрудж Макдак"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         

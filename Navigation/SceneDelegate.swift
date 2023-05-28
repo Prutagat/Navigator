@@ -74,7 +74,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
-struct Post {
-    var title: String
-}
