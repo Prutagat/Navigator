@@ -5,8 +5,6 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Subviews
     
-    private let profileHeaderView = ProfileHeaderView()
-    
     private let tableView: UITableView =  {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +32,6 @@ class ProfileViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(profileHeaderView)
         view.addSubview(tableView)
         
     }
@@ -42,6 +39,7 @@ class ProfileViewController: UIViewController {
     private func setupTable() {
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
+        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -50,12 +48,7 @@ class ProfileViewController: UIViewController {
         let safeAreaGuide = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            profileHeaderView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
-            profileHeaderView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
-            profileHeaderView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            profileHeaderView.heightAnchor.constraint(equalToConstant:220),
-            
-            tableView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
@@ -64,15 +57,7 @@ class ProfileViewController: UIViewController {
     
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        UITableView.automaticDimension
-    }
+extension ProfileViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         2
@@ -114,10 +99,29 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(
-            _ tableView: UITableView,
-            didSelectRowAt indexPath: IndexPath
-    ) {
+}
+
+extension ProfileViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: "ProfileHeaderView")
+                as? ProfileHeaderView else {return UITableViewCell()}
+        
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 0:
+            return 220
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             
             let nextViewController = PhotosViewController()
