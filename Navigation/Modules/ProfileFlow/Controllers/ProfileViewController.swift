@@ -5,7 +5,7 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Subviews
     
-    private let tableView: UITableView =  {
+    static var tableView: UITableView =  {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -32,26 +32,26 @@ class ProfileViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(tableView)
+        view.addSubview(Self.tableView)
         
     }
     
     private func setupTable() {
-        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
-        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
-        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
-        tableView.delegate = self
-        tableView.dataSource = self
+        Self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
+        Self.tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
+        Self.tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
+        Self.tableView.delegate = self
+        Self.tableView.dataSource = self
     }
     
     private func setupConstraints() {
         let safeAreaGuide = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
+            Self.tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
+            Self.tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            Self.tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            Self.tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
         ])
     }
     
@@ -104,11 +104,9 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: "ProfileHeaderView")
                 as? ProfileHeaderView else {return UITableViewCell()}
-        
         return headerView
     }
     
@@ -123,9 +121,7 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            
             let nextViewController = PhotosViewController()
-            
             navigationController?.navigationBar.isHidden = false
             navigationController?.pushViewController(
                 nextViewController,

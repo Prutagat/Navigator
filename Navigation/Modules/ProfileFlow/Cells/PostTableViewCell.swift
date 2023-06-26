@@ -54,7 +54,6 @@ final class PostTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
         addSubviews()
         setupConstraints()
     }
@@ -64,10 +63,6 @@ final class PostTableViewCell: UITableViewCell {
     }
 
     // MARK: - Private
-    
-    private func setupUI() {
-        
-    }
     
     private func addSubviews() {
         [authorLabel,
@@ -109,5 +104,4 @@ final class PostTableViewCell: UITableViewCell {
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
-    
 }

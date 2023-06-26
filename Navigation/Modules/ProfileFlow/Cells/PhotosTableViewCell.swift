@@ -28,24 +28,18 @@ class PhotosTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "arrow.forward")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
         return imageView
     }()
     
     private lazy var photoStack: UIStackView = { [unowned self] in
         let stackView = UIStackView()
-            
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.clipsToBounds = true
-        
         stackView.spacing = 8
-        
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        
         let arrayPhotos = makePhotos()
-        
         for index in 0...3 {
             let imageView: UIImageView = {
                 let imageView = UIImageView()
@@ -59,7 +53,6 @@ class PhotosTableViewCell: UITableViewCell {
             NSLayoutConstraint.activate([imageView.widthAnchor.constraint(equalToConstant: widthHeightAnchor)]
             )
         }
-            
         return stackView
     }()
     
@@ -69,7 +62,6 @@ class PhotosTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews()
         setupConstraints()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -97,9 +89,7 @@ class PhotosTableViewCell: UITableViewCell {
             photoStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             photoStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             photoStack.heightAnchor.constraint(equalToConstant: widthHeightAnchor)
-        ]
-        )
+        ])
     }
-    
 }
 
