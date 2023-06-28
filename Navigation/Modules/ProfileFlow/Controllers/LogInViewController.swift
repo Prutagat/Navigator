@@ -7,20 +7,15 @@ class LogInViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        
         scrollView.showsVerticalScrollIndicator = true
         scrollView.showsHorizontalScrollIndicator = false
-        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         return scrollView
     }()
     
     private lazy var contentView: UIView = {
         let contentView = UIView()
-        
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        
         return contentView
     }()
 
@@ -28,7 +23,6 @@ class LogInViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "logo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
         return imageView
     }()
     
@@ -37,7 +31,6 @@ class LogInViewController: UIViewController {
         setupTextField(textField)
         textField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         textField.placeholder = "Почта"
-        
         return textField
     }()
     
@@ -47,7 +40,6 @@ class LogInViewController: UIViewController {
         textField.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         textField.placeholder = "Пароль"
         textField.isSecureTextEntry = true
-        
         return textField
     }()
     
@@ -58,32 +50,25 @@ class LogInViewController: UIViewController {
         button.clipsToBounds = true
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
-        
         button.addTarget(
             self,
             action: #selector(buttonPressed),
             for: .touchUpInside)
-        
         return button
     }()
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
         let stackView = UIStackView()
-            
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.clipsToBounds = true
-        
         stackView.layer.borderColor = UIColor.lightGray.cgColor
         stackView.layer.borderWidth = 0.5
         stackView.layer.cornerRadius = 10
-        
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-                
         stackView.addArrangedSubview(mailTextFields)
         stackView.addArrangedSubview(passwordTextFields)
-            
         return stackView
     }()
     
@@ -91,7 +76,6 @@ class LogInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         addSubviews()
         setupConstraints()
@@ -99,13 +83,11 @@ class LogInViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setupKeyboardObservers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         removeKeyboardObservers()
     }
     
@@ -122,10 +104,8 @@ class LogInViewController: UIViewController {
     
     @objc func buttonPressed() {
         let profileViewController = ProfileViewController()
-            
         profileViewController.modalTransitionStyle = .flipHorizontal
         profileViewController.modalPresentationStyle = .fullScreen
-            
         navigationController?.pushViewController(profileViewController, animated: true)
     }
     
@@ -154,7 +134,6 @@ class LogInViewController: UIViewController {
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
         contentView.addSubview(logoImageView)
         contentView.addSubview(authorizationFields)
         contentView.addSubview(logInButton)
@@ -162,7 +141,6 @@ class LogInViewController: UIViewController {
     
     private func setupConstraints() {
         let safeAreaGuide = view.safeAreaLayoutGuide
-        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
@@ -188,10 +166,9 @@ class LogInViewController: UIViewController {
             logInButton.topAnchor.constraint(equalTo: authorizationFields.bottomAnchor, constant: 16),
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            logInButton.heightAnchor.constraint(equalToConstant: 50)
+            logInButton.heightAnchor.constraint(equalToConstant: 50),
+            logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        
-        contentView.subviews.last?.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
     
     private func setupKeyboardObservers() {
@@ -225,7 +202,6 @@ extension LogInViewController: UITextFieldDelegate {
         _ textField: UITextField
     ) -> Bool {
         textField.resignFirstResponder()
-        
         return true
     }
 }

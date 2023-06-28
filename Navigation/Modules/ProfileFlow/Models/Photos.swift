@@ -9,7 +9,7 @@ import UIKit
 
 func makePhotos() -> [String] {
     [
-        "profile_picture",
+        "Profile_picture",
         "Dewey",
         "Donald",
         "Huey",

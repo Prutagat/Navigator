@@ -23,7 +23,6 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        
         backgroundColor = .systemGray
         setupSubviews()
         setupConstraints()
