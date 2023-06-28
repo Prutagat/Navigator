@@ -1,5 +1,6 @@
 
 import UIKit
+import StorageService
 
 class ProfileViewController: UIViewController {
     
@@ -11,13 +12,12 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    private var dataSource = PostModel.makeDataSource()
+    private var dataSource = StorageService.PostModel.makeDataSource()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         addSubviews()
         setupTable()
@@ -28,7 +28,11 @@ class ProfileViewController: UIViewController {
     
     private func setupView() {
         title = "Профиль"
-        view.backgroundColor = .systemGray4
+        #if DEBUG
+            view.backgroundColor = .systemGray4
+        #else
+            view.backgroundColor = .blue
+        #endif
     }
     
     private func addSubviews() {

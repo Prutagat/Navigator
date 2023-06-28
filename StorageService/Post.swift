@@ -7,21 +7,17 @@
 
 import UIKit
 
-struct Post {
-    var title: String
-}
-
-struct PostModel {
-    var author: String
-    var description: String
-    var image: String
-    var likes: Int
-    var views: Int
+public struct PostModel {
+    public var author: String
+    public var description: String
+    public var image: String
+    public var likes: Int
+    public var views: Int
 }
 
 extension PostModel {
     
-    static func makeDataSource() -> [PostModel] {
+    public static func makeDataSource() -> [PostModel] {
         [
             PostModel(
                 author: "Дональд Дак",

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StorageService
 
 final class PostTableViewCell: UITableViewCell {
     
@@ -72,7 +73,7 @@ final class PostTableViewCell: UITableViewCell {
          viewsLabel].forEach({contentView.addSubview($0)})
     }
     
-    func configure(with post: PostModel) {
+    func configure(with post: StorageService.PostModel) {
         authorLabel.text = post.author
         descriptionLabel.text = post.description
         imagePost.image = UIImage(named: post.image)
