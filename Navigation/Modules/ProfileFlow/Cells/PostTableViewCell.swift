@@ -7,6 +7,7 @@
 
 import UIKit
 import StorageService
+import iOSIntPackage
 
 final class PostTableViewCell: UITableViewCell {
     
@@ -76,7 +77,9 @@ final class PostTableViewCell: UITableViewCell {
     func configure(with post: StorageService.PostModel) {
         authorLabel.text = post.author
         descriptionLabel.text = post.description
-        imagePost.image = UIImage(named: post.image)
+        ImageProcessor().processImage(sourceImage: UIImage(named: post.image)!, filter: .allCases.randomElement() ?? .noir) { image in
+            imagePost.image = image
+        }
         likesLabel.text = "Лайки: \(String(post.likes))"
         viewsLabel.text = "Просмотры: \(String(post.views))"
     }
