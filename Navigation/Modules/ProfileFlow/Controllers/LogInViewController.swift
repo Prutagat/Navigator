@@ -108,8 +108,8 @@ class LogInViewController: UIViewController {
             #else
                 let user = CurrentUserService().getUser(login: mailTextFields.text ?? "")
             #endif
-        if let finalUser = user {
-            let profileViewController = ProfileViewController(user: finalUser)
+        if let authorizedUser = user {
+            let profileViewController = ProfileViewController(user: authorizedUser)
             profileViewController.modalTransitionStyle = .flipHorizontal
             profileViewController.modalPresentationStyle = .fullScreen
             navigationController?.pushViewController(profileViewController, animated: true)

@@ -22,7 +22,14 @@ class User {
 }
 
 protocol UserService {
+    var user: User { get }
     func getUser(login: String) -> User?
+}
+
+extension UserService {
+    func getUser(login: String) -> User? {
+        return login == user.login ? user : nil
+    }
 }
 
 class CurrentUserService: UserService {
@@ -32,13 +39,6 @@ class CurrentUserService: UserService {
         avatar: UIImage(named: "Profile_picture") ?? nil,
         status: "Безумно можно быть уткой"
     )
-    func getUser(login: String) -> User? {
-        var currentUser: User?
-        if login == "Duck" {
-            currentUser = user
-        }
-        return currentUser
-    }
 }
 
 class TestUserService: UserService {
@@ -48,11 +48,4 @@ class TestUserService: UserService {
         avatar: UIImage(named: "logo") ?? nil,
         status: "Тестовый профиль"
     )
-    func getUser(login: String) -> User? {
-        var testUser: User?
-        if login == "admin" {
-            testUser = user
-        }
-        return testUser
-    }
 }
