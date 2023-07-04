@@ -103,10 +103,22 @@ class LogInViewController: UIViewController {
     }
     
     @objc func buttonPressed() {
-        let profileViewController = ProfileViewController()
-        profileViewController.modalTransitionStyle = .flipHorizontal
-        profileViewController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(profileViewController, animated: true)
+            #if DEBUG
+                let user = TestUserService().getUser(login: mailTextFields.text ?? "")
+            #else
+                let user = CurrentUserService().getUser(login: mailTextFields.text ?? "")
+            #endif
+        if let authorizedUser = user {
+            let profileViewController = ProfileViewController(user: authorizedUser)
+            profileViewController.modalTransitionStyle = .flipHorizontal
+            profileViewController.modalPresentationStyle = .fullScreen
+            navigationController?.pushViewController(profileViewController, animated: true)
+        } else {
+            let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин", preferredStyle: .alert)
+            let okBtn = UIAlertAction(title: "Понял", style: .default)
+            alertController.addAction(okBtn)
+            present(alertController, animated: true)
+        }
     }
     
     // MARK: - Private

@@ -4,6 +4,10 @@ import StorageService
 
 class ProfileViewController: UIViewController {
     
+    // MARK: - parametrs
+    
+    private var user: User
+    
     // MARK: - Subviews
     
     static var tableView: UITableView =  {
@@ -22,6 +26,15 @@ class ProfileViewController: UIViewController {
         addSubviews()
         setupTable()
         setupConstraints()
+    }
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName:nil, bundle:nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Private
@@ -111,6 +124,7 @@ extension ProfileViewController: UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: "ProfileHeaderView")
                 as? ProfileHeaderView else {return UITableViewCell()}
+        headerView.setupUser(user: user)
         return headerView
     }
     

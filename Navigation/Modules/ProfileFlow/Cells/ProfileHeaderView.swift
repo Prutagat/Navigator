@@ -4,7 +4,7 @@ import SnapKit
 
 class ProfileHeaderView: UITableViewHeaderFooterView {
     
-    // MARK: - statusText
+    // MARK: - parametrs
     
     private var avatarOriginPoint = CGPoint()
     private var statusText: String = ""
@@ -31,7 +31,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Profile_picture")
+        //imageView.image = UIImage(named: "Profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -43,7 +43,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let fullNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Скрудж Макдак"
+        //label.text = "Скрудж Макдак"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -51,7 +51,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ожидание..."
+        //label.text = "Ожидание..."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -152,6 +152,14 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             ProfileViewController.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = true
             self.avatarImageView.isUserInteractionEnabled = true
         }
+    }
+    
+    // MARK: - Public
+    
+    public func setupUser(user: User) {
+        fullNameLabel.text = user.name
+        statusLabel.text = user.status
+        avatarImageView.image = user.avatar
     }
     
     // MARK: - Private
