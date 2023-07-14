@@ -3,6 +3,8 @@ import UIKit
 
 class LogInViewController: UIViewController {
     
+    var loginDelegate: LoginViewControllerDelegate?
+    
     // MARK: - Subviews
     
     private lazy var scrollView: UIScrollView = {
@@ -103,22 +105,16 @@ class LogInViewController: UIViewController {
     }
     
     @objc func buttonPressed() {
-            #if DEBUG
-                let user = TestUserService().getUser(login: mailTextFields.text ?? "")
-            #else
-                let user = CurrentUserService().getUser(login: mailTextFields.text ?? "")
-            #endif
-        if let authorizedUser = user {
-            let profileViewController = ProfileViewController(user: authorizedUser)
-            profileViewController.modalTransitionStyle = .flipHorizontal
-            profileViewController.modalPresentationStyle = .fullScreen
-            navigationController?.pushViewController(profileViewController, animated: true)
-        } else {
-            let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин", preferredStyle: .alert)
-            let okBtn = UIAlertAction(title: "Понял", style: .default)
-            alertController.addAction(okBtn)
-            present(alertController, animated: true)
-        }
+        
+        let login = mailTextFields.text!
+        let password = passwordTextFields.text!
+        
+        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return presentError() }
+        
+        let profileViewController = ProfileViewController(user: userIsCorrect)
+        profileViewController.modalTransitionStyle = .flipHorizontal
+        profileViewController.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(profileViewController, animated: true)
     }
     
     // MARK: - Private
@@ -206,6 +202,13 @@ class LogInViewController: UIViewController {
         notificationCenter.removeObserver(self)
     }
     
+    private func presentError() {
+        let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин и (или) пароль", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "Понял", style: .default)
+        alertController.addAction(okBtn)
+        present(alertController, animated: true)
+    }
+    
 }
 
 extension LogInViewController: UITextFieldDelegate {
@@ -215,5 +218,39 @@ extension LogInViewController: UITextFieldDelegate {
     ) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+protocol LoginViewControllerDelegate {
+    func check(login: String, password: String) -> User?
+}
+
+struct LoginInspector: LoginViewControllerDelegate {
+    func check(login: String, password: String) -> User? {
+        
+        let userIsCorrect = Checker.shared.check(login: login, password: password)
+        
+        if userIsCorrect {
+            #if DEBUG
+                let user = CurrentUserService().getUser(login: login, password: password)
+            #else
+                let user = TestUserService().getUser(login: login, password: password)
+            #endif
+
+            if let userAutorized = user {
+                return userAutorized
+            }
+        }
+        return nil
+    }
+}
+
+protocol LoginFactory {
+    func makeLoginInspector() -> LoginInspector
+}
+
+struct MyLoginFactory: LoginFactory {
+    func makeLoginInspector() -> LoginInspector {
+        return LoginInspector()
     }
 }

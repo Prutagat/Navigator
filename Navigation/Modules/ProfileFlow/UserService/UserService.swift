@@ -9,12 +9,14 @@ import UIKit
 
 class User {
     var login: String
+    var password: String
     var name: String
     var avatar: UIImage?
     var status: String
     
-    init(login: String, name: String, avatar: UIImage?, status: String) {
+    init(login: String, password: String, name: String, avatar: UIImage?, status: String) {
         self.login = login
+        self.password = password
         self.name = name
         self.avatar = avatar
         self.status = status
@@ -23,18 +25,19 @@ class User {
 
 protocol UserService {
     var user: User { get }
-    func getUser(login: String) -> User?
+    func getUser(login: String, password: String) -> User?
 }
 
 extension UserService {
-    func getUser(login: String) -> User? {
-        return login == user.login ? user : nil
+    func getUser(login: String, password: String) -> User? {
+        return login == user.login && password == user.password ? user : nil
     }
 }
 
 class CurrentUserService: UserService {
     let user = User(
         login: "Duck",
+        password: "",
         name: "Скрудж Макдак",
         avatar: UIImage(named: "Profile_picture") ?? nil,
         status: "Безумно можно быть уткой"
@@ -44,6 +47,7 @@ class CurrentUserService: UserService {
 class TestUserService: UserService {
     let user = User(
         login: "admin",
+        password: "",
         name: "Админ",
         avatar: UIImage(named: "logo") ?? nil,
         status: "Тестовый профиль"
