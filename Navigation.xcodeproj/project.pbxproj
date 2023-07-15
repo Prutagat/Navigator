@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810AB3AD2A60185500269411 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810AB3AC2A60185500269411 /* Checker.swift */; };
 		81161B692A2E6F5B00805507 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81161B682A2E6F5B00805507 /* TabBarController.swift */; };
 		81161B712A2E74E600805507 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81161B702A2E74E600805507 /* LogInViewController.swift */; };
 		811B83D42A1E81470017B96A /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811B83D32A1E81470017B96A /* PostTableViewCell.swift */; };
@@ -83,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		810AB3AC2A60185500269411 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 		81161B682A2E6F5B00805507 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		81161B702A2E74E600805507 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		811B83D32A1E81470017B96A /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
@@ -141,6 +143,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		810AB3AB2A60182D00269411 /* CheckerService */ = {
+			isa = PBXGroup;
+			children = (
+				810AB3AC2A60185500269411 /* Checker.swift */,
+			);
+			path = CheckerService;
+			sourceTree = "<group>";
+		};
 		81161B6A2A2E6FE000805507 /* Aplication */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +247,7 @@
 		819CD8C02A0D1E2F001C2E79 /* ProfileFlow */ = {
 			isa = PBXGroup;
 			children = (
+				810AB3AB2A60182D00269411 /* CheckerService */,
 				815F84CB2A5346400001C8CC /* UserService */,
 				81161B722A2E74EE00805507 /* Controllers */,
 				81161B742A2E758900805507 /* Cells */,
@@ -455,6 +466,7 @@
 				81B482122A02CFEA002E8FA3 /* AppDelegate.swift in Sources */,
 				81594A2C2A23DECB0084B4D8 /* Photos.swift in Sources */,
 				81B4822E2A02F2D4002E8FA3 /* InfoViewController.swift in Sources */,
+				810AB3AD2A60185500269411 /* Checker.swift in Sources */,
 				81161B712A2E74E600805507 /* LogInViewController.swift in Sources */,
 				81B482282A02E171002E8FA3 /* ProfileViewController.swift in Sources */,
 				81B482262A02E15F002E8FA3 /* FeedViewController.swift in Sources */,
