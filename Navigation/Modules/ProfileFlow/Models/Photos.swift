@@ -31,3 +31,9 @@ func makePhotos() -> [String] {
         "Magica_De_Spell"
     ]
 }
+
+func makePhotos() -> [UIImage] {
+    var photos: [UIImage] = []
+    makePhotos().forEach({photos.append(UIImage(named: $0)!)})
+    return photos
+}

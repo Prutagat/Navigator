@@ -33,6 +33,7 @@ class LogInViewController: UIViewController {
         setupTextField(textField)
         textField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         textField.placeholder = "Почта"
+        textField.text = "Duck"
         return textField
     }()
     

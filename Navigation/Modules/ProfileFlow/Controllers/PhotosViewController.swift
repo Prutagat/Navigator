@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import iOSIntPackage
 
 class PhotosViewController: UIViewController {
     
-    fileprivate lazy var photos = makePhotos()
+    fileprivate lazy var photos : [UIImage] = []
+    
+    let imagePublisherFacade = ImagePublisherFacade()
     
     // MARK: - Subviews
     
@@ -39,12 +42,14 @@ class PhotosViewController: UIViewController {
         setupView()
         setupCollectionView()
         setupConstraints()
+        subscribe()
+        loadPhotos()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         navigationController?.navigationBar.isHidden = true
+        imagePublisherFacade.removeSubscription(for:  self)
     }
     
     // MARK: - Private
@@ -72,6 +77,14 @@ class PhotosViewController: UIViewController {
         ])
     }
     
+    private func subscribe() {
+        imagePublisherFacade.subscribe(self)
+    }
+    
+    private func loadPhotos() {
+        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: makePhotos())
+        //imagePublisherFacade.removeSubscription(for: self)
+    }
 }
 
 extension PhotosViewController: UICollectionViewDataSource {
@@ -91,9 +104,8 @@ extension PhotosViewController: UICollectionViewDataSource {
             withReuseIdentifier: PhotosCollectionViewCell.id,
             for: indexPath) as! PhotosCollectionViewCell
         
-        let namePhoto = photos[indexPath.row]
-        cell.setup(nameImage: namePhoto)
-        
+        let image = photos[indexPath.row]
+        cell.setup(image: image)
         return cell
     }
 }
@@ -154,4 +166,12 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
         8
     }
     
+}
+
+extension PhotosViewController: ImageLibrarySubscriber {
+    
+    func receive(images: [UIImage]) {
+        photos = images
+        collectionView.reloadData()
+    }
 }

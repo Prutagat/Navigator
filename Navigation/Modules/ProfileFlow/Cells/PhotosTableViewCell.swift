@@ -39,11 +39,11 @@ class PhotosTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        let arrayPhotos = makePhotos()
+        let arrayPhotos: [UIImage] = makePhotos()
         for index in 0...3 {
             let imageView: UIImageView = {
                 let imageView = UIImageView()
-                imageView.image = UIImage(named: arrayPhotos[index])
+                imageView.image = arrayPhotos[index]
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.clipsToBounds = true
                 imageView.layer.cornerRadius = 6
