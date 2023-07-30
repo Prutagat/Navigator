@@ -27,38 +27,10 @@ class LogInViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    private lazy var mailTextFields: UITextField = {
-        let textField = UITextField()
-        setupTextField(textField)
-        textField.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        textField.placeholder = "Почта"
-        textField.text = "Duck"
-        return textField
-    }()
-    
-    private lazy var passwordTextFields: UITextField = {
-        let textField = UITextField()
-        setupTextField(textField)
-        textField.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        textField.placeholder = "Пароль"
-        textField.isSecureTextEntry = true
-        return textField
-    }()
-    
-    private lazy var logInButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Войти", for: .normal)
-        button.setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(
-            self,
-            action: #selector(buttonPressed),
-            for: .touchUpInside)
-        return button
-    }()
+
+    private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "Duck" )
+    private var passwordTextFields = CustomTextField(placeholderText: "Пароль", isSecureTextEntry: true)
+    private var logInButton = CustomButton(title: "Войти", cornerRadius: 10)
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
         let stackView = UIStackView()
@@ -80,6 +52,7 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupButton()
         addSubviews()
         setupConstraints()
     }
@@ -119,25 +92,14 @@ class LogInViewController: UIViewController {
     }
     
     // MARK: - Private
-    
-    private func setupTextField(_ textField: UITextField) {
-        textField.backgroundColor = .systemGray6
-        textField.clipsToBounds = true
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocapitalizationType = .none
-        textField.tintColor = UIColor(named: "new_color_set")
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.keyboardType = UIKeyboardType.default
-        textField.returnKeyType = UIReturnKeyType.done
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        textField.delegate = self
-    }
         
     private func setupView() {
         self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
+        mailTextFields.delegate = self
+        passwordTextFields.delegate = self
+//        mailTextFields.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+//        passwordTextFields.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     private func addSubviews() {
@@ -210,6 +172,24 @@ class LogInViewController: UIViewController {
         present(alertController, animated: true)
     }
     
+    private func setupButton() {
+        logInButton.buttonAction = { [weak self] in
+            self?.logIn()
+        }
+    }
+
+    private func logIn() {
+        
+        let login = mailTextFields.text!
+        let password = passwordTextFields.text!
+        
+        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return presentError() }
+        
+        let profileViewController = ProfileViewController(user: userIsCorrect)
+        profileViewController.modalTransitionStyle = .flipHorizontal
+        profileViewController.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(profileViewController, animated: true)
+    }
 }
 
 extension LogInViewController: UITextFieldDelegate {
