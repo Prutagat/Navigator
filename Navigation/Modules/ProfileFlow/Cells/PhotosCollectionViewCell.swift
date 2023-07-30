@@ -57,10 +57,4 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
     func setup(image: UIImage) {
         imageView.image = image
     }
-    
-    func setup(nameImage: String, pablisher: ImagePublisherFacade) {
-        let image = UIImage(named: nameImage)
-        pablisher.addImagesWithTimer(time: 2.5, repeat: 10, userImages: [image!])
-        imageView.image = image
-    }
 }
