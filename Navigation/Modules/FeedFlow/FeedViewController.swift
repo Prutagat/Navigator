@@ -4,10 +4,20 @@ import SnapKit
 
 class FeedViewController: UIViewController {
     
-    private var firstActionButton = CustomButton(title: "Кнопка 1", cornerRadius: 10)
-    private var secondActionButton = CustomButton(title: "Кнопка 2", cornerRadius: 10)
-    private var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10)
+    private let viewModel: FeedViewModel
+    
+    private lazy var firstActionButton = CustomButton(title: "Кнопка 1", cornerRadius: 10) { [weak self] in
+        self?.viewModel.changeAction(.pushAction)
+    }
+    private lazy var secondActionButton = CustomButton(title: "Кнопка 2", cornerRadius: 10) { [weak self] in
+        self?.viewModel.changeAction(.pushAction)
+    }
+    private lazy var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10) { [weak self] in
+        self?.viewModel.checkWord = (self?.passwordTextField.text)!
+        self?.viewModel.changeAction(.checkWordAtion)
+    }
     private var passwordTextField = CustomTextField(placeholderText: "Пароль", text: "Donald")
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
     
     private var statusLabel: UILabel = {
         let lable = UILabel()
@@ -30,32 +40,43 @@ class FeedViewController: UIViewController {
         return stackView
     }()
     
+    init(viewModel: FeedViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
-        setupUI()
+        layout()
+        bindViewModel()
     }
 
-    private func setupSubviews() {
+    private func bindViewModel() {
+        viewModel.stateChanged = { [weak self] state in
+            switch state {
+            case .pushButtonAction:
+                self?.pushViewController()
+            case .checkWordButtonAction(let word):
+                self?.checkWord(word: word)
+            case .none:
+                ()
+            }
+        }
+    }
+    
+    private func layout() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        title = "Лента"
+        view.backgroundColor = .systemGray4
         view.addSubview(stackView)
         view.addSubview(statusLabel)
         view.addSubview(passwordTextField)
         view.addSubview(checkGuessButton)
-    }
-    
-    private func setupUI() {
-        title = "Лента"
-        view.backgroundColor = .systemGray4
-        firstActionButton.buttonAction = { [weak self] in
-            self?.pushViewController()
-        }
-        secondActionButton.buttonAction = { [weak self] in
-            self?.pushViewController()
-        }
-        checkGuessButton.buttonAction = {
-            [weak self] in
-               self?.checkWord()
-        }
+        view.addSubview(activityIndicator)
         stackView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
             make.width.equalTo(100)
@@ -76,6 +97,9 @@ class FeedViewController: UIViewController {
             make.trailing.equalTo(-16)
             make.height.equalTo(35)
         }
+        activityIndicator.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
     }
     
     private func pushViewController() {
@@ -86,8 +110,8 @@ class FeedViewController: UIViewController {
         navigationController?.pushViewController(postViewController, animated: true)
     }
     
-    private func checkWord() {
-        let isCorrect = FeedModel().check(word: passwordTextField.text!)
+    private func checkWord(word: String) {
+        let isCorrect = FeedModel().check(word: word)
         let alertController = UIAlertController(title: "Внимание", message: isCorrect ? "Пароль верный":"Пароль не верный", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "ОК", style: .default)
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
@@ -95,5 +119,6 @@ class FeedViewController: UIViewController {
         alertController.addAction(cancelBtn)
         present(alertController, animated: true)
         statusLabel.textColor = isCorrect ? .green : .red
+        statusLabel.text = isCorrect ? "Верно" : "Не верно"
     }
 }
