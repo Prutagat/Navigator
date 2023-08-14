@@ -7,13 +7,17 @@
 
 import UIKit
 
+
 final class CustomButton: UIButton {
     
-    var buttonAction: (() -> Void)?
+    typealias Action = () -> Void
     
-    init(title: String, cornerRadius: CGFloat) {
+    var buttonAction: Action
+    
+    init(title: String, cornerRadius: CGFloat, action: @escaping Action) {
+        buttonAction = action
         super.init(frame: .zero)
-        buttonSetup(title: title, cornerRadius: cornerRadius)
+        buttonSetup(title: title, cornerRadius: cornerRadius, action: action)
     }
     
     required init?(coder: NSCoder) {
@@ -21,15 +25,15 @@ final class CustomButton: UIButton {
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
-        buttonAction?()
+        buttonAction()
     }
     
-    private func buttonSetup(title: String, cornerRadius: CGFloat) {
+    private func buttonSetup(title: String, cornerRadius: CGFloat, action: Action) {
         setTitle(title, for: .normal)
         setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
-        addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
 }

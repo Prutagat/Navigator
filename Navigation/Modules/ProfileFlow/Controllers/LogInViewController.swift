@@ -30,7 +30,9 @@ class LogInViewController: UIViewController {
 
     private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "Duck" )
     private var passwordTextFields = CustomTextField(placeholderText: "Пароль", isSecureTextEntry: true)
-    private var logInButton = CustomButton(title: "Войти", cornerRadius: 10)
+    private lazy var logInButton = CustomButton(title: "Войти", cornerRadius: 10) { [weak self] in
+        self?.logIn()
+    }
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
         let stackView = UIStackView()
@@ -52,7 +54,6 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupButton()
         addSubviews()
         setupConstraints()
     }
@@ -170,12 +171,6 @@ class LogInViewController: UIViewController {
         let okBtn = UIAlertAction(title: "Понял", style: .default)
         alertController.addAction(okBtn)
         present(alertController, animated: true)
-    }
-    
-    private func setupButton() {
-        logInButton.buttonAction = { [weak self] in
-            self?.logIn()
-        }
     }
 
     private func logIn() {

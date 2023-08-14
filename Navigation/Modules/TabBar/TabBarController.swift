@@ -21,7 +21,7 @@ final class TabBarController: UITabBarController {
         let logInViewController = LogInViewController()
         logInViewController.loginDelegate = MyLoginFactory().makeLoginInspector()
         profileNavigationController = UINavigationController.init(rootViewController: logInViewController)
-        feedNavigationController = UINavigationController.init(rootViewController: FeedViewController())
+        feedNavigationController = UINavigationController.init(rootViewController: FeedViewController(viewModel: FeedViewModel()))
         
         self.viewControllers = [
             feedNavigationController,

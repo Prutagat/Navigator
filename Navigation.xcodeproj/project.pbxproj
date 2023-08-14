@@ -37,6 +37,7 @@
 		81B482282A02E171002E8FA3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B482272A02E171002E8FA3 /* ProfileViewController.swift */; };
 		81B4822B2A02E3F5002E8FA3 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4822A2A02E3F5002E8FA3 /* PostViewController.swift */; };
 		81B4822E2A02F2D4002E8FA3 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4822D2A02F2D4002E8FA3 /* InfoViewController.swift */; };
+		81C198E12A7983FC00362ADA /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C198E02A7983FC00362ADA /* FeedViewModel.swift */; };
 		81DD5AAC2A75A2DF004E0E3D /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD5AAB2A75A2DF004E0E3D /* FeedModel.swift */; };
 		81DD5AAE2A766AB8004E0E3D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD5AAD2A766AB8004E0E3D /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 		81B4822A2A02E3F5002E8FA3 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		81B4822D2A02F2D4002E8FA3 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		81BBAB4D2A23C00100479F5A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		81C198E02A7983FC00362ADA /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		81DD5AAB2A75A2DF004E0E3D /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		81DD5AAD2A766AB8004E0E3D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,6 +189,7 @@
 		81161B6D2A2E73E400805507 /* FeedFlow */ = {
 			isa = PBXGroup;
 			children = (
+				81C198DF2A7983E200362ADA /* FeedModel */,
 				81B482252A02E15E002E8FA3 /* FeedViewController.swift */,
 				81B4822A2A02E3F5002E8FA3 /* PostViewController.swift */,
 				81B4822D2A02F2D4002E8FA3 /* InfoViewController.swift */,
@@ -304,6 +307,14 @@
 				81B4821F2A02CFEB002E8FA3 /* Info.plist */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		81C198DF2A7983E200362ADA /* FeedModel */ = {
+			isa = PBXGroup;
+			children = (
+				81C198E02A7983FC00362ADA /* FeedViewModel.swift */,
+			);
+			path = FeedModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -489,6 +500,7 @@
 				810AB3AD2A60185500269411 /* Checker.swift in Sources */,
 				81161B712A2E74E600805507 /* LogInViewController.swift in Sources */,
 				81B482282A02E171002E8FA3 /* ProfileViewController.swift in Sources */,
+				81C198E12A7983FC00362ADA /* FeedViewModel.swift in Sources */,
 				81B482262A02E15F002E8FA3 /* FeedViewController.swift in Sources */,
 				81594A312A2614470084B4D8 /* PhotosCollectionViewCell.swift in Sources */,
 				815F84CD2A53465E0001C8CC /* UserService.swift in Sources */,
