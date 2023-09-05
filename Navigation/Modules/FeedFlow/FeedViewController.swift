@@ -1,9 +1,9 @@
 
 import UIKit
-import SnapKit
 
 class FeedViewController: UIViewController {
     
+    let coordinator: FeedCoordinator
     private let viewModel: FeedViewModel
     
     private lazy var firstActionButton = CustomButton(title: "Кнопка 1", cornerRadius: 10) { [weak self] in
@@ -40,8 +40,9 @@ class FeedViewController: UIViewController {
         return stackView
     }()
     
-    init(viewModel: FeedViewModel) {
+    init(viewModel: FeedViewModel, coordinator: FeedCoordinator) {
         self.viewModel = viewModel
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -59,7 +60,7 @@ class FeedViewController: UIViewController {
         viewModel.stateChanged = { [weak self] state in
             switch state {
             case .pushButtonAction:
-                self?.pushViewController()
+                self?.coordinator.present(.post)
             case .checkWordButtonAction(let word):
                 self?.checkWord(word: word)
             case .none:
@@ -102,22 +103,9 @@ class FeedViewController: UIViewController {
         }
     }
     
-    private func pushViewController() {
-        let postViewController = PostViewController()
-        postViewController.post = Post(title: "Переопределенный")
-        postViewController.modalTransitionStyle = .flipHorizontal
-        postViewController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(postViewController, animated: true)
-    }
-    
     private func checkWord(word: String) {
         let isCorrect = FeedModel().check(word: word)
-        let alertController = UIAlertController(title: "Внимание", message: isCorrect ? "Пароль верный":"Пароль не верный", preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "ОК", style: .default)
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
-        alertController.addAction(okBtn)
-        alertController.addAction(cancelBtn)
-        present(alertController, animated: true)
+        coordinator.present(.alert(isCorrect))
         statusLabel.textColor = isCorrect ? .green : .red
         statusLabel.text = isCorrect ? "Верно" : "Не верно"
     }

@@ -28,7 +28,7 @@ final class LoginCoordinator: Coordinatable {
     }
     
     func start() {
-        let viewController = LoginViewCoordinator(coordinator: self)
+        let viewController = LoginViewController(coordinator: self)
         viewController.loginDelegate = MyLoginFactory().makeLoginInspector()
         navigationController.pushViewController(viewController, animated: true)
     }
@@ -36,5 +36,12 @@ final class LoginCoordinator: Coordinatable {
     func showTabBarController(user: User) {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController, parentCoordinator: self, user: user)
         tabBarCoordinator.start()
+    }
+    
+    func presentError() {
+        let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин и (или) пароль", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "Понял", style: .default)
+        alertController.addAction(okBtn)
+        navigationController.present(alertController, animated: true)
     }
 }

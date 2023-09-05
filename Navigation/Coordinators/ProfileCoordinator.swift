@@ -22,11 +22,20 @@ final class ProfileCoordinator: Coordinatable {
     }
     
     func start() {
-        let viewController = ProfileViewController(user: user)
+        let viewController = ProfileViewController(coordinator: self, user: user)
         navigationController.setViewControllers([viewController], animated: true)
         navigationController.tabBarItem = UITabBarItem(
             title: "Профиль",
             image: UIImage(systemName: "person"),
             tag: 1)
+    }
+    
+    func pushPhotos() {
+        let nextViewController = PhotosViewController()
+        navigationController.navigationBar.isHidden = false
+        navigationController.pushViewController(
+            nextViewController,
+            animated: true
+        )
     }
 }

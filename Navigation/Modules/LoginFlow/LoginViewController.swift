@@ -1,7 +1,7 @@
 
 import UIKit
 
-class LoginViewCoordinator: UIViewController {
+class LoginViewController: UIViewController {
     
     let coordinator: LoginCoordinator
     var loginDelegate: LoginViewControllerDelegate?
@@ -160,25 +160,18 @@ class LoginViewCoordinator: UIViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self)
     }
-    
-    private func presentError() {
-        let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин и (или) пароль", preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "Понял", style: .default)
-        alertController.addAction(okBtn)
-        present(alertController, animated: true)
-    }
 
     private func logIn() {
         
         let login = mailTextFields.text!
         let password = passwordTextFields.text!
         
-        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return presentError() }
+        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return coordinator.presentError() }
         coordinator.showTabBarController(user: userIsCorrect)
     }
 }
 
-extension LoginViewCoordinator: UITextFieldDelegate {
+extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(
         _ textField: UITextField
