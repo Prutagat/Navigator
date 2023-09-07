@@ -1,8 +1,9 @@
 
 import UIKit
 
-class LogInViewController: UIViewController {
+class LoginViewController: UIViewController {
     
+    let coordinator: LoginCoordinator
     var loginDelegate: LoginViewControllerDelegate?
     
     // MARK: - Subviews
@@ -51,6 +52,15 @@ class LogInViewController: UIViewController {
     
     // MARK: - Lifecycle
     
+    init(coordinator: LoginCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -79,19 +89,6 @@ class LogInViewController: UIViewController {
         scrollView.contentInset.bottom = 0.0
     }
     
-    @objc func buttonPressed() {
-        
-        let login = mailTextFields.text!
-        let password = passwordTextFields.text!
-        
-        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return presentError() }
-        
-        let profileViewController = ProfileViewController(user: userIsCorrect)
-        profileViewController.modalTransitionStyle = .flipHorizontal
-        profileViewController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(profileViewController, animated: true)
-    }
-    
     // MARK: - Private
         
     private func setupView() {
@@ -99,8 +96,6 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
-//        mailTextFields.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-//        passwordTextFields.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     private func addSubviews() {
@@ -165,29 +160,18 @@ class LogInViewController: UIViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self)
     }
-    
-    private func presentError() {
-        let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин и (или) пароль", preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "Понял", style: .default)
-        alertController.addAction(okBtn)
-        present(alertController, animated: true)
-    }
 
     private func logIn() {
         
         let login = mailTextFields.text!
         let password = passwordTextFields.text!
         
-        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return presentError() }
-        
-        let profileViewController = ProfileViewController(user: userIsCorrect)
-        profileViewController.modalTransitionStyle = .flipHorizontal
-        profileViewController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(profileViewController, animated: true)
+        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return coordinator.presentError() }
+        coordinator.showTabBarController(user: userIsCorrect)
     }
 }
 
-extension LogInViewController: UITextFieldDelegate {
+extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(
         _ textField: UITextField

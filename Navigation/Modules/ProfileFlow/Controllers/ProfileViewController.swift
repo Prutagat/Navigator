@@ -6,6 +6,7 @@ class ProfileViewController: UIViewController {
     
     // MARK: - parametrs
     
+    var coordinator: ProfileCoordinator
     private var user: User
     
     // MARK: - Subviews
@@ -28,7 +29,8 @@ class ProfileViewController: UIViewController {
         setupConstraints()
     }
     
-    init(user: User) {
+    init(coordinator: ProfileCoordinator, user: User) {
+        self.coordinator = coordinator
         self.user = user
         super.init(nibName:nil, bundle:nil)
     }
@@ -139,12 +141,7 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let nextViewController = PhotosViewController()
-            navigationController?.navigationBar.isHidden = false
-            navigationController?.pushViewController(
-                nextViewController,
-                animated: true
-            )
+            coordinator.pushPhotos()
         }
     }
 }
