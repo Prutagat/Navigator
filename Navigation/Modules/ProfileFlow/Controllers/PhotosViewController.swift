@@ -10,9 +10,7 @@ import iOSIntPackage
 
 class PhotosViewController: UIViewController {
     
-    fileprivate lazy var photos : [UIImage] = []
-    
-    let imagePublisherFacade = ImagePublisherFacade()
+    private var photos: [CGImage] = []
     
     // MARK: - Subviews
     
@@ -38,18 +36,20 @@ class PhotosViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         setupCollectionView()
         setupConstraints()
-        subscribe()
-        loadPhotos()
+        loadPhotos(qos: .userInteractive)
+        loadPhotos(qos: .userInitiated)
+        loadPhotos(qos: .utility)
+        loadPhotos(qos: .default)
+        loadPhotos(qos: .background)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         navigationController?.navigationBar.isHidden = true
-        imagePublisherFacade.removeSubscription(for:  self)
     }
     
     // MARK: - Private
@@ -77,13 +77,19 @@ class PhotosViewController: UIViewController {
         ])
     }
     
-    private func subscribe() {
-        imagePublisherFacade.subscribe(self)
-    }
-    
-    private func loadPhotos() {
-        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: makePhotos())
-        //imagePublisherFacade.removeSubscription(for: self)
+    private func loadPhotos(qos: QualityOfService) {
+        let filter: ColorFilter = .allCases.randomElement() ?? .noir
+        let start = DispatchTime.now()
+        ImageProcessor().processImagesOnThread(sourceImages: makePhotos(), filter: filter, qos: qos) { [weak self] cgImages in
+            cgImages.forEach({ self?.photos.append($0!) })
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+                let end = DispatchTime.now()
+                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
+                let timeInterval = Double(nanoTime) / 1_000_000_000
+                print("\(timeInterval) заняла обработка фото фильтром \(filter) по приоритету \(qos)")
+            }
+        }
     }
 }
 
@@ -104,8 +110,10 @@ extension PhotosViewController: UICollectionViewDataSource {
             withReuseIdentifier: PhotosCollectionViewCell.id,
             for: indexPath) as! PhotosCollectionViewCell
         
-        let image = photos[indexPath.row]
+        let cgImage = photos[indexPath.row]
+        let image = UIImage(cgImage: cgImage)
         cell.setup(image: image)
+        
         return cell
     }
 }
@@ -166,12 +174,4 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
         8
     }
     
-}
-
-extension PhotosViewController: ImageLibrarySubscriber {
-    
-    func receive(images: [UIImage]) {
-        photos = images
-        collectionView.reloadData()
-    }
 }
