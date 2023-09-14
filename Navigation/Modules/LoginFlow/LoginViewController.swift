@@ -5,8 +5,15 @@ class LoginViewController: UIViewController {
     
     let coordinator: LoginCoordinator
     var loginDelegate: LoginViewControllerDelegate?
+    var workItem: DispatchWorkItem?
     
     // MARK: - Subviews
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -31,8 +38,11 @@ class LoginViewController: UIViewController {
 
     private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "Duck" )
     private var passwordTextFields = CustomTextField(placeholderText: "Пароль", isSecureTextEntry: true)
-    private lazy var logInButton = CustomButton(title: "Войти", cornerRadius: 10) { [weak self] in
+    private lazy var loginButton = CustomButton(title: "Войти", cornerRadius: 10) { [weak self] in
         self?.logIn()
+    }
+    private lazy var choosePasswordButton = CustomButton(title: "Подобрать пароль", cornerRadius: 10) {  [weak self] in
+        self?.choosePassword()
     }
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
@@ -103,7 +113,9 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubview(logoImageView)
         contentView.addSubview(authorizationFields)
-        contentView.addSubview(logInButton)
+        contentView.addSubview(loginButton)
+        contentView.addSubview(choosePasswordButton)
+        contentView.addSubview(activityIndicator)
     }
     
     private func setupConstraints() {
@@ -130,11 +142,19 @@ class LoginViewController: UIViewController {
             authorizationFields.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             authorizationFields.heightAnchor.constraint(equalToConstant: 100),
             
-            logInButton.topAnchor.constraint(equalTo: authorizationFields.bottomAnchor, constant: 16),
-            logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            logInButton.heightAnchor.constraint(equalToConstant: 50),
-            logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            loginButton.topAnchor.constraint(equalTo: authorizationFields.bottomAnchor, constant: 16),
+            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            loginButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            choosePasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
+            choosePasswordButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            choosePasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            choosePasswordButton.heightAnchor.constraint(equalToConstant: 50),
+            choosePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: authorizationFields.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: authorizationFields.centerYAnchor)
         ])
     }
     
@@ -168,6 +188,26 @@ class LoginViewController: UIViewController {
         
         guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return coordinator.presentError() }
         coordinator.showTabBarController(user: userIsCorrect)
+    }
+    
+    private func choosePassword() {
+        workItem?.cancel()
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let passwordToUnlock = String((0..<4).map { _ in letters.randomElement()! })
+        activityIndicator.startAnimating()
+        
+        let choosePassword = DispatchWorkItem {
+            let correctPassword = ChoosePasswordService.shared.bruteForce(passwordToUnlock: passwordToUnlock)
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicator.stopAnimating()
+                self?.passwordTextFields.text = correctPassword
+                self?.passwordTextFields.isSecureTextEntry = false
+                self?.activityIndicator.stopAnimating()
+            }
+        }
+        
+        workItem = choosePassword
+        DispatchQueue.global().async(execute: choosePassword)
     }
 }
 
