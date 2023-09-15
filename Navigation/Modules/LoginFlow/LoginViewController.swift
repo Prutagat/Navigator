@@ -153,8 +153,8 @@ class LoginViewController: UIViewController {
             choosePasswordButton.heightAnchor.constraint(equalToConstant: 50),
             choosePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            activityIndicator.centerXAnchor.constraint(equalTo: authorizationFields.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: authorizationFields.centerYAnchor)
+            activityIndicator.centerXAnchor.constraint(equalTo: passwordTextFields.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: passwordTextFields.centerYAnchor)
         ])
     }
     
@@ -195,6 +195,7 @@ class LoginViewController: UIViewController {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let passwordToUnlock = String((0..<4).map { _ in letters.randomElement()! })
         activityIndicator.startAnimating()
+        choosePasswordButton.isEnabled = false
         
         let choosePassword = DispatchWorkItem {
             let correctPassword = ChoosePasswordService.shared.bruteForce(passwordToUnlock: passwordToUnlock)
@@ -203,6 +204,7 @@ class LoginViewController: UIViewController {
                 self?.passwordTextFields.text = correctPassword
                 self?.passwordTextFields.isSecureTextEntry = false
                 self?.activityIndicator.stopAnimating()
+                self?.choosePasswordButton.isEnabled = true
             }
         }
         
