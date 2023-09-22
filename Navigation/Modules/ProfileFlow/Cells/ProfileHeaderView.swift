@@ -8,6 +8,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private var avatarOriginPoint = CGPoint()
     private var statusText: String = ""
+    private var changeStatusTimer: Timer = Timer()
     
     // MARK: - Subviews
     
@@ -51,25 +52,15 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        //label.text = "Ожидание..."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var setStatusButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Показать статус", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 4
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.shadowOffset = CGSize(width: 4, height: 4)
-        button.layer.shadowRadius = 4.0
-        button.layer.shadowOpacity = 0.7
-        return button
-    }()
+    private lazy var setStatusButton = CustomButton(title: "Установить статус", cornerRadius: 10) {  [weak self] in
+        self?.setStatus()
+    }
     
     private lazy var statusTextField: UITextField = {
         let textField = UITextField()
@@ -180,11 +171,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             action: #selector(statusTextChanged),
             for: .editingChanged
         )
-        setStatusButton.addTarget(
-            self,
-            action: #selector(buttonPressed),
-            for: .touchUpInside
-        )
         returnAvatarButton.addTarget(
             self,
             action: #selector(returnAvatarToOrigin),
@@ -231,5 +217,30 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         returnAvatarButton.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(16)
         }
+    }
+    
+    private func createTimer() {
+        
+        var changeTime = 3
+        
+        changeStatusTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            self?.setStatusButton.setTitle("Статус изменится через \(changeTime). Отменить?", for: .normal)
+            changeTime -= 1
+            
+            if changeTime == 0 {
+                self?.statusLabel.text = self?.statusText
+                self?.setStatusButton.setTitle("Установить статус", for: .normal)
+                timer.invalidate()
+            }
         }
+    }
+    
+    private func setStatus() {
+        if changeStatusTimer.isValid {
+            setStatusButton.setTitle("Установить статус", for: .normal)
+            changeStatusTimer.invalidate()
+        } else {
+            createTimer()
+        }
+    }
 }
