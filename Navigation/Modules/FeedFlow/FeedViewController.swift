@@ -104,8 +104,20 @@ class FeedViewController: UIViewController {
     }
     
     private func checkWord(word: String) {
-        let isCorrect = FeedModel().check(word: word)
-        coordinator.present(.alert(isCorrect))
+        var isCorrect = false
+        do {
+            isCorrect = try FeedModel().check(word: word)
+            coordinator.present(.autorized)
+        } catch ApiError.unauthorized {
+            coordinator.present(.error(.unauthorized))
+        } catch ApiError.notFound {
+            coordinator.present(.error(.notFound))
+        } catch ApiError.isEmpty {
+            coordinator.present(.error(.isEmpty))
+        } catch {
+            coordinator.present(.error(.unauthorized))
+        }
+        
         statusLabel.textColor = isCorrect ? .green : .red
         statusLabel.text = isCorrect ? "Верно" : "Не верно"
     }

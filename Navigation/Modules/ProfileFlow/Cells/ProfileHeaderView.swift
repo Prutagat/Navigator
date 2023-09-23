@@ -32,7 +32,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        //imageView.image = UIImage(named: "Profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -219,8 +218,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         }
     }
     
-    private func createTimer() {
-        
+    private func createTimer(statusText: String) {
         var changeTime = 3
         
         changeStatusTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
@@ -228,7 +226,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             changeTime -= 1
             
             if changeTime == 0 {
-                self?.statusLabel.text = self?.statusText
+                self?.statusLabel.text = statusText
                 self?.setStatusButton.setTitle("Установить статус", for: .normal)
                 timer.invalidate()
             }
@@ -240,7 +238,26 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             setStatusButton.setTitle("Установить статус", for: .normal)
             changeStatusTimer.invalidate()
         } else {
-            createTimer()
+            getStatus(textLabel: statusText) { [weak self] result in
+                switch result {
+                case .success(let success):
+                    self?.createTimer(statusText: success)
+                case .failure(let failure):
+                    print(failure)
+                }
+            }
         }
+    }
+    
+    private func getStatus(textLabel: String,complection: @escaping (Result<String, ApiError>) -> Void) {
+        if textLabel == "" {
+            complection(.failure(.isEmpty))
+        } else {
+            complection(.success(textLabel))
+        }
+    }
+    
+    private func pushAlert(text: String) {
+        
     }
 }
