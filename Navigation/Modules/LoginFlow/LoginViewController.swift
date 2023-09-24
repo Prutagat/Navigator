@@ -230,15 +230,15 @@ protocol LoginViewControllerDelegate {
 struct LoginInspector: LoginViewControllerDelegate {
     func check(login: String, password: String) -> User? {
         
-        let userIsCorrect = Checker.shared.check(login: login, password: password)
+        guard let userIsCorrect = try? Checker.shared.check(login: login, password: password) else { preconditionFailure("Поля не заполнены!") }
         
         if userIsCorrect {
-            #if DEBUG
-                let user = CurrentUserService().getUser(login: login, password: password)
-            #else
-                let user = TestUserService().getUser(login: login, password: password)
-            #endif
-
+#if DEBUG
+            let user = CurrentUserService().getUser(login: login, password: password)
+#else
+            let user = TestUserService().getUser(login: login, password: password)
+#endif
+            
             if let userAutorized = user {
                 return userAutorized
             }

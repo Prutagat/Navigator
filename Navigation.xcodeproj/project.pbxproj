@@ -26,6 +26,7 @@
 		815F84CA2A53438F0001C8CC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 815F84C92A53438F0001C8CC /* SnapKit */; };
 		815F84CD2A53465E0001C8CC /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815F84CC2A53465E0001C8CC /* UserService.swift */; };
 		81646E022A703E8B006E027B /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81646E012A703E8B006E027B /* CustomButton.swift */; };
+		8178CBB02ABF2CCB009BFB4F /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178CBAF2ABF2CCB009BFB4F /* ApiError.swift */; };
 		817F34062A50AA2C00D503CC /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 817F34052A50AA2C00D503CC /* iOSIntPackage */; };
 		819CD8C22A0D1E42001C2E79 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819CD8C12A0D1E42001C2E79 /* ProfileHeaderView.swift */; };
 		81B482122A02CFEA002E8FA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B482112A02CFEA002E8FA3 /* AppDelegate.swift */; };
@@ -108,6 +109,7 @@
 		81594A302A2614470084B4D8 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		815F84CC2A53465E0001C8CC /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		81646E012A703E8B006E027B /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		8178CBAF2ABF2CCB009BFB4F /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		819CD8C12A0D1E42001C2E79 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		81B4820E2A02CFEA002E8FA3 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B482112A02CFEA002E8FA3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 		81161B6D2A2E73E400805507 /* FeedFlow */ = {
 			isa = PBXGroup;
 			children = (
+				8178CBAF2ABF2CCB009BFB4F /* ApiError.swift */,
 				81C198DF2A7983E200362ADA /* FeedModel */,
 				81B482252A02E15E002E8FA3 /* FeedViewController.swift */,
 				81B4822A2A02E3F5002E8FA3 /* PostViewController.swift */,
@@ -213,7 +216,6 @@
 			children = (
 				81594A2B2A23DECB0084B4D8 /* Photos.swift */,
 				81494C772A4CD03300E4FE5E /* PostTitle.swift */,
-				81DD5AAB2A75A2DF004E0E3D /* FeedModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,7 +269,6 @@
 		819CD8C02A0D1E2F001C2E79 /* ProfileFlow */ = {
 			isa = PBXGroup;
 			children = (
-				810AB3AB2A60182D00269411 /* CheckerService */,
 				815F84CB2A5346400001C8CC /* UserService */,
 				81161B722A2E74EE00805507 /* Controllers */,
 				81161B742A2E758900805507 /* Cells */,
@@ -328,6 +329,7 @@
 			children = (
 				81C742DD2AB31FE5001285D8 /* ChoosePasswordService */,
 				81161B702A2E74E600805507 /* LoginViewController.swift */,
+				810AB3AB2A60182D00269411 /* CheckerService */,
 			);
 			path = LoginFlow;
 			sourceTree = "<group>";
@@ -335,6 +337,7 @@
 		81C198DF2A7983E200362ADA /* FeedModel */ = {
 			isa = PBXGroup;
 			children = (
+				81DD5AAB2A75A2DF004E0E3D /* FeedModel.swift */,
 				81C198E02A7983FC00362ADA /* FeedViewModel.swift */,
 			);
 			path = FeedModel;
@@ -537,6 +540,7 @@
 				81B482262A02E15F002E8FA3 /* FeedViewController.swift in Sources */,
 				81594A312A2614470084B4D8 /* PhotosCollectionViewCell.swift in Sources */,
 				81BBF6F32A98E8C3006F5264 /* Coordinatable.swift in Sources */,
+				8178CBB02ABF2CCB009BFB4F /* ApiError.swift in Sources */,
 				815F84CD2A53465E0001C8CC /* UserService.swift in Sources */,
 				81BBF6F72A98EA40006F5264 /* FeedCoordinator.swift in Sources */,
 				81594A2F2A25F1950084B4D8 /* PhotosViewController.swift in Sources */,

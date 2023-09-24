@@ -12,7 +12,8 @@ final class FeedCoordinator: Coordinatable {
     enum Presentation {
         case post
         case info
-        case alert(Bool)
+        case autorized
+        case error(ApiError)
         case attention
     }
     
@@ -44,8 +45,24 @@ final class FeedCoordinator: Coordinatable {
             case .info:
                 let infoViewController = InfoViewController(coordinator: self)
                 navigationController.present(infoViewController, animated: true, completion: nil)
-            case .alert(let isCorrect):
-                let alertController = UIAlertController(title: "Внимание", message: isCorrect ? "Пароль верный":"Пароль не верный", preferredStyle: .alert)
+            case .autorized:
+                let alertController = UIAlertController(title: "Внимание", message: "Пароль верный", preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "ОК", style: .default)
+                let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+                alertController.addAction(okBtn)
+                alertController.addAction(cancelBtn)
+                navigationController.present(alertController, animated: true)
+            case .error(let apiError):
+                var message = ""
+                switch apiError {
+                case .isEmpty:
+                    message = "Пустое поле, заполните!"
+                case .unauthorized:
+                    message = "Вы не угадали!"
+                case .notFound:
+                    message = "Не найден"
+                }
+                let alertController = UIAlertController(title: "Внимание", message: message, preferredStyle: .alert)
                 let okBtn = UIAlertAction(title: "ОК", style: .default)
                 let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
                 alertController.addAction(okBtn)
