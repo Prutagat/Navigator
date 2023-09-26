@@ -7,7 +7,7 @@ class InfoViewController: UIViewController {
     let coordinator: FeedCoordinator
     
     private lazy var actionButton = CustomButton(title: "Открыть", cornerRadius: 10) { [weak self] in
-        self?.coordinator.present(.attention)
+        self?.coordinator.present(.attention("Кря кря кря"))
     }
     
     init(coordinator: FeedCoordinator) {
