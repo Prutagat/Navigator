@@ -1,9 +1,20 @@
 
 import UIKit
+import StorageService
 
 class PostViewController: UIViewController {
    
+    let coordinator: FeedCoordinator
     var post: Post = Post(title: "")
+    
+    init(coordinator: FeedCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,9 +28,6 @@ class PostViewController: UIViewController {
     }
     
     @objc func buttonPressed(_ sender: UIButton) {
-        let infoViewController = InfoViewController()
-        infoViewController.modalTransitionStyle = .coverVertical
-        infoViewController.modalPresentationStyle = .pageSheet
-        present(infoViewController, animated: true)
+        coordinator.present(.info)
     }
 }

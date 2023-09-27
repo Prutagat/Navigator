@@ -1,7 +1,13 @@
 
 import UIKit
+import StorageService
 
 class ProfileViewController: UIViewController {
+    
+    // MARK: - parametrs
+    
+    var coordinator: ProfileCoordinator
+    private var user: User
     
     // MARK: - Subviews
     
@@ -11,24 +17,37 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    private var dataSource = PostModel.makeDataSource()
+    private var dataSource = StorageService.PostModel.makeDataSource()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         addSubviews()
         setupTable()
         setupConstraints()
     }
     
+    init(coordinator: ProfileCoordinator, user: User) {
+        self.coordinator = coordinator
+        self.user = user
+        super.init(nibName:nil, bundle:nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Private
     
     private func setupView() {
         title = "Профиль"
-        view.backgroundColor = .systemGray4
+        #if DEBUG
+            view.backgroundColor = .systemGray4
+        #else
+            view.backgroundColor = .blue
+        #endif
     }
     
     private func addSubviews() {
@@ -107,6 +126,7 @@ extension ProfileViewController: UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: "ProfileHeaderView")
                 as? ProfileHeaderView else {return UITableViewCell()}
+        headerView.setupUser(user: user)
         return headerView
     }
     
@@ -121,12 +141,7 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let nextViewController = PhotosViewController()
-            navigationController?.navigationBar.isHidden = false
-            navigationController?.pushViewController(
-                nextViewController,
-                animated: true
-            )
+            coordinator.pushPhotos()
         }
     }
 }

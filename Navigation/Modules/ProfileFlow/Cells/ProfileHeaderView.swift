@@ -1,12 +1,14 @@
 
 import UIKit
+import SnapKit
 
 class ProfileHeaderView: UITableViewHeaderFooterView {
     
-    // MARK: - statusText
+    // MARK: - parametrs
     
     private var avatarOriginPoint = CGPoint()
     private var statusText: String = ""
+    private var changeStatusTimer: Timer = Timer()
     
     // MARK: - Subviews
     
@@ -30,7 +32,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Profile_picture")
         imageView.layer.cornerRadius = 50
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
@@ -42,7 +43,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let fullNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Скрудж Макдак"
+        //label.text = "Скрудж Макдак"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -50,25 +51,15 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ожидание..."
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var setStatusButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Показать статус", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 4
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.shadowOffset = CGSize(width: 4, height: 4)
-        button.layer.shadowRadius = 4.0
-        button.layer.shadowOpacity = 0.7
-        return button
-    }()
+    private lazy var setStatusButton = CustomButton(title: "Установить статус", cornerRadius: 10) {  [weak self] in
+        self?.setStatus()
+    }
     
     private lazy var statusTextField: UITextField = {
         let textField = UITextField()
@@ -153,6 +144,14 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         }
     }
     
+    // MARK: - Public
+    
+    public func setupUser(user: User) {
+        fullNameLabel.text = user.name
+        statusLabel.text = user.status
+        avatarImageView.image = user.avatar
+    }
+    
     // MARK: - Private
     
     private func addSubviews() {
@@ -170,11 +169,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             self,
             action: #selector(statusTextChanged),
             for: .editingChanged
-        )
-        setStatusButton.addTarget(
-            self,
-            action: #selector(buttonPressed),
-            for: .touchUpInside
         )
         returnAvatarButton.addTarget(
             self,
@@ -194,34 +188,76 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-            avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
-            
-            fullNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 27),
-            fullNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            fullNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            setStatusButton.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 16),
-            setStatusButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            setStatusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            setStatusButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -16),
-            statusTextField.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            statusTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            statusTextField.heightAnchor.constraint(equalToConstant: 40),
-            
-            statusLabel.bottomAnchor.constraint(equalTo: statusTextField.topAnchor, constant: -10),
-            statusLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            statusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            returnAvatarButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            returnAvatarButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            
-            widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
-        ])
+        avatarImageView.snp.makeConstraints { make in
+            make.top.leading.equalTo(contentView).inset(16)
+            make.width.height.equalTo(100)
         }
+        fullNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView).inset(27)
+            make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
+            make.trailing.equalTo(contentView).inset(16)
+        }
+        setStatusButton.snp.makeConstraints { make in
+            make.top.equalTo(avatarImageView.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(contentView).inset(16)
+            make.height.equalTo(50)
+        }
+        statusTextField.snp.makeConstraints { make in
+            make.bottom.equalTo(setStatusButton.snp.top).offset(-16)
+            make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
+            make.trailing.equalTo(contentView).inset(16)
+            make.height.equalTo(40)
+        }
+        statusLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(statusTextField.snp.top).offset(-10)
+            make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
+            make.trailing.equalTo(contentView).inset(16)
+        }
+        returnAvatarButton.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(16)
+        }
+    }
+    
+    private func createTimer(statusText: String) {
+        var changeTime = 3
+        
+        changeStatusTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            self?.setStatusButton.setTitle("Статус изменится через \(changeTime). Отменить?", for: .normal)
+            changeTime -= 1
+            
+            if changeTime == 0 {
+                self?.statusLabel.text = statusText
+                self?.setStatusButton.setTitle("Установить статус", for: .normal)
+                timer.invalidate()
+            }
+        }
+    }
+    
+    private func setStatus() {
+        if changeStatusTimer.isValid {
+            setStatusButton.setTitle("Установить статус", for: .normal)
+            changeStatusTimer.invalidate()
+        } else {
+            getStatus(textLabel: statusText) { [weak self] result in
+                switch result {
+                case .success(let success):
+                    self?.createTimer(statusText: success)
+                case .failure(let failure):
+                    print(failure)
+                }
+            }
+        }
+    }
+    
+    private func getStatus(textLabel: String,complection: @escaping (Result<String, ApiError>) -> Void) {
+        if textLabel == "" {
+            complection(.failure(.isEmpty))
+        } else {
+            complection(.success(textLabel))
+        }
+    }
+    
+    private func pushAlert(text: String) {
+        
+    }
 }

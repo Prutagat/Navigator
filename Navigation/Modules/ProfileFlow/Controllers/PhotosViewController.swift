@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import iOSIntPackage
 
 class PhotosViewController: UIViewController {
     
-    fileprivate lazy var photos = makePhotos()
+    private var photos: [CGImage] = []
     
     // MARK: - Subviews
     
@@ -35,10 +36,14 @@ class PhotosViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         setupCollectionView()
         setupConstraints()
+        loadPhotos(qos: .userInteractive)
+        loadPhotos(qos: .userInitiated)
+        loadPhotos(qos: .utility)
+        loadPhotos(qos: .default)
+        loadPhotos(qos: .background)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,6 +77,20 @@ class PhotosViewController: UIViewController {
         ])
     }
     
+    private func loadPhotos(qos: QualityOfService) {
+        let filter: ColorFilter = .allCases.randomElement() ?? .noir
+        let start = DispatchTime.now()
+        ImageProcessor().processImagesOnThread(sourceImages: makePhotos(), filter: filter, qos: qos) { [weak self] cgImages in
+            cgImages.forEach({ self?.photos.append($0!) })
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+                let end = DispatchTime.now()
+                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
+                let timeInterval = Double(nanoTime) / 1_000_000_000
+                print("\(timeInterval) заняла обработка фото фильтром \(filter) по приоритету \(qos)")
+            }
+        }
+    }
 }
 
 extension PhotosViewController: UICollectionViewDataSource {
@@ -91,8 +110,9 @@ extension PhotosViewController: UICollectionViewDataSource {
             withReuseIdentifier: PhotosCollectionViewCell.id,
             for: indexPath) as! PhotosCollectionViewCell
         
-        let namePhoto = photos[indexPath.row]
-        cell.setup(nameImage: namePhoto)
+        let cgImage = photos[indexPath.row]
+        let image = UIImage(cgImage: cgImage)
+        cell.setup(image: image)
         
         return cell
     }
