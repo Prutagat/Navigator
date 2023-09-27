@@ -14,10 +14,10 @@ final class CustomButton: UIButton {
     
     var buttonAction: Action
     
-    init(title: String, cornerRadius: CGFloat, action: @escaping Action) {
+    init(title: String, cornerRadius: CGFloat, image: UIImage = UIImage(), action: @escaping Action) {
         buttonAction = action
         super.init(frame: .zero)
-        buttonSetup(title: title, cornerRadius: cornerRadius, action: action)
+        buttonSetup(title: title, cornerRadius: cornerRadius, image: image, action: action)
     }
     
     required init?(coder: NSCoder) {
@@ -28,9 +28,13 @@ final class CustomButton: UIButton {
         buttonAction()
     }
     
-    private func buttonSetup(title: String, cornerRadius: CGFloat, action: Action) {
+    private func buttonSetup(title: String, cornerRadius: CGFloat, image: UIImage, action: Action) {
         setTitle(title, for: .normal)
-        setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
+        if image != UIImage() {
+            setImage(image, for: .normal)
+        } else {
+            setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
+        }
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
         translatesAutoresizingMaskIntoConstraints = false

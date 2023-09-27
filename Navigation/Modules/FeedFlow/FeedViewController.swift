@@ -6,12 +6,16 @@ class FeedViewController: UIViewController {
     let coordinator: FeedCoordinator
     private let viewModel: FeedViewModel
     
-    private lazy var firstActionButton = CustomButton(title: "Кнопка 1", cornerRadius: 10) { [weak self] in
-        self?.viewModel.changeAction(.pushAction)
+    private lazy var firstActionButton = CustomButton(title: "Аудиопроигрыватель", cornerRadius: 10) { [weak self] in
+        self?.coordinator.present(.audio)
     }
-    private lazy var secondActionButton = CustomButton(title: "Кнопка 2", cornerRadius: 10) { [weak self] in
-        self?.viewModel.changeAction(.pushAction)
+    private lazy var secondActionButton = CustomButton(title: "Видеопроигрыватель", cornerRadius: 10) { [weak self] in
+        self?.coordinator.present(.video)
     }
+    private lazy var thirdActionButton = CustomButton(title: "Диктофон", cornerRadius: 10) { [weak self] in
+        self?.coordinator.present(.voiceRecorder)
+    }
+    
     private lazy var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10) { [weak self] in
         self?.viewModel.checkWord = (self?.passwordTextField.text)!
         self?.viewModel.changeAction(.checkWordAtion)
@@ -37,6 +41,7 @@ class FeedViewController: UIViewController {
         stackView.spacing = 10
         stackView.addArrangedSubview(self.firstActionButton)
         stackView.addArrangedSubview(self.secondActionButton)
+        stackView.addArrangedSubview(self.thirdActionButton)
         return stackView
     }()
     
@@ -80,8 +85,8 @@ class FeedViewController: UIViewController {
         view.addSubview(activityIndicator)
         stackView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
-            make.width.equalTo(100)
-            make.height.equalTo(80)
+            make.width.equalTo(200)
+            make.height.equalTo(130)
         }
         statusLabel.snp.makeConstraints { make in
             make.top.equalTo(stackView.snp.bottom).offset(16)

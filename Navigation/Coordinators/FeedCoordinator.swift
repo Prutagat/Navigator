@@ -12,9 +12,12 @@ final class FeedCoordinator: Coordinatable {
     enum Presentation {
         case post
         case info
+        case audio
+        case video
+        case voiceRecorder
         case autorized
         case error(ApiError)
-        case attention
+        case attention(String)
     }
     
     var navigationController: UINavigationController
@@ -45,6 +48,15 @@ final class FeedCoordinator: Coordinatable {
             case .info:
                 let infoViewController = InfoViewController(coordinator: self)
                 navigationController.present(infoViewController, animated: true, completion: nil)
+            case .audio:
+                let audioViewController = AudioViewController(coordinator: self)
+                navigationController.pushViewController(audioViewController, animated: true)
+            case .video:
+                let videoViewController = VideoViewController(coordinator: self)
+                navigationController.pushViewController(videoViewController, animated: true)
+            case .voiceRecorder:
+                let voiceRecorderViewController = VoiceRecorderViewController(coordinator: self)
+                navigationController.pushViewController(voiceRecorderViewController, animated: true)
             case .autorized:
                 let alertController = UIAlertController(title: "Внимание", message: "Пароль верный", preferredStyle: .alert)
                 let okBtn = UIAlertAction(title: "ОК", style: .default)
@@ -68,14 +80,13 @@ final class FeedCoordinator: Coordinatable {
                 alertController.addAction(okBtn)
                 alertController.addAction(cancelBtn)
                 navigationController.present(alertController, animated: true)
-            case .attention:
-                let alertController = UIAlertController(title: "Внимание", message: "Кря кря кря", preferredStyle: .alert)
-                let okBtn = UIAlertAction(title: "Кря (в консоль)", style: .default) { _ in print("Кря кря") }
-                let cancelBtn = UIAlertAction(title: "Бред", style: .cancel)
+            case .attention(let message):
+                let alertController = UIAlertController(title: "Внимание", message: message, preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "ОК", style: .default)
+                let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
                 alertController.addAction(okBtn)
                 alertController.addAction(cancelBtn)
-                guard let viewController = navigationController.presentedViewController else { return }
-                viewController.present(alertController, animated: true)
+                navigationController.present(alertController, animated: true)
             }
         }
 }
