@@ -15,10 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         
-//        let appConfiguration: AppConfiguration = AppConfiguration.people(URL(string: "https://swapi.dev/api/people/5")!)
-//        let appConfiguration: AppConfiguration = AppConfiguration.starships(URL(string: "https://swapi.dev/api/starships/3"
-        let appConfiguration: AppConfiguration = AppConfiguration.films(URL(string: "https://swapi.dev/api/films/1")!)
-        NetworkService(appConfiguration: appConfiguration)
+        let appConfiguration = AppConfiguration.allCases.randomElement()!
+        NetworkService.request(for: appConfiguration)
         
         let navigationController = UINavigationController()
         let tabBarController = UITabBarController()

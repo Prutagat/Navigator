@@ -7,32 +7,21 @@
 
 import Foundation
 
-enum AppConfiguration {
-    case people(URL)
-    case starships(URL)
-    case films(URL)
+enum AppConfiguration: String, CaseIterable {
+    case people = "https://swapi.dev/api/people/5"
+    case starships = "https://swapi.dev/api/starships/3"
+    case films = "https://swapi.dev/api/films/1"
+    
+    var url: URL? {
+        URL(string: self.rawValue)
+    }
 }
 
 struct NetworkService {
     
-    
-    init(appConfiguration: AppConfiguration) {
-        NetworkService.request(for: appConfiguration)
-    }
-    
     static func request(for configuration: AppConfiguration) {
-        var rawValue: URL
-        switch configuration {
-        case .people(let uRL):
-            rawValue = uRL
-        case .starships(let uRL):
-            rawValue = uRL
-        case .films(let uRL):
-            rawValue = uRL
-        }
-        
         let session = URLSession.shared
-        let sessionDataTask = session.dataTask(with: rawValue) { data, response, error in
+        let sessionDataTask = session.dataTask(with: configuration.url!) { data, response, error in
             if let error {
                 print("Ошибка: \(error.localizedDescription)")
                 return
