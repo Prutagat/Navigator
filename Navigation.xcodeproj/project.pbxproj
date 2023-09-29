@@ -36,6 +36,7 @@
 		8178CBC12AC21B86009BFB4F /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178CBC02AC21B86009BFB4F /* VideoViewController.swift */; };
 		8178CBC32AC359AB009BFB4F /* VoiceRecorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178CBC22AC359AB009BFB4F /* VoiceRecorderViewController.swift */; };
 		8178CBC72AC48CFE009BFB4F /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178CBC62AC48CFE009BFB4F /* NetworkService.swift */; };
+		8178CBC92AC5B2CB009BFB4F /* Resident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178CBC82AC5B2CB009BFB4F /* Resident.swift */; };
 		817F34062A50AA2C00D503CC /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 817F34052A50AA2C00D503CC /* iOSIntPackage */; };
 		819CD8C22A0D1E42001C2E79 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819CD8C12A0D1E42001C2E79 /* ProfileHeaderView.swift */; };
 		81B482122A02CFEA002E8FA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B482112A02CFEA002E8FA3 /* AppDelegate.swift */; };
@@ -128,6 +129,7 @@
 		8178CBC02AC21B86009BFB4F /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		8178CBC22AC359AB009BFB4F /* VoiceRecorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderViewController.swift; sourceTree = "<group>"; };
 		8178CBC62AC48CFE009BFB4F /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		8178CBC82AC5B2CB009BFB4F /* Resident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resident.swift; sourceTree = "<group>"; };
 		819CD8C12A0D1E42001C2E79 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		81B4820E2A02CFEA002E8FA3 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B482112A02CFEA002E8FA3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 			children = (
 				81594A2B2A23DECB0084B4D8 /* Photos.swift */,
 				81494C772A4CD03300E4FE5E /* PostTitle.swift */,
+				8178CBC82AC5B2CB009BFB4F /* Resident.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -322,7 +325,6 @@
 			children = (
 				81161B722A2E74EE00805507 /* Controllers */,
 				81161B742A2E758900805507 /* Cells */,
-				81161B732A2E754900805507 /* Models */,
 			);
 			path = ProfileFlow;
 			sourceTree = "<group>";
@@ -353,6 +355,7 @@
 			children = (
 				81161B6A2A2E6FE000805507 /* Aplication */,
 				8178CBC42AC48C7F009BFB4F /* Services */,
+				81161B732A2E754900805507 /* Models */,
 				8178CBB52AC2113F009BFB4F /* Songs */,
 				81BBF6F12A98E89E006F5264 /* Coordinators */,
 				81646E002A703E6A006E027B /* CastomUI */,
@@ -577,6 +580,7 @@
 			files = (
 				81594A2A2A23D2DA0084B4D8 /* PhotosTableViewCell.swift in Sources */,
 				81DD5AAC2A75A2DF004E0E3D /* FeedModel.swift in Sources */,
+				8178CBC92AC5B2CB009BFB4F /* Resident.swift in Sources */,
 				81494C782A4CD03300E4FE5E /* PostTitle.swift in Sources */,
 				8178CBC32AC359AB009BFB4F /* VoiceRecorderViewController.swift in Sources */,
 				81BBF6FC2A9FB4FF006F5264 /* ProfileCoordinator.swift in Sources */,
