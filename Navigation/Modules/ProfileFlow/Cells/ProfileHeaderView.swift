@@ -43,7 +43,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let fullNameLabel: UILabel = {
         let label = UILabel()
-        //label.text = "Скрудж Макдак"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -146,7 +145,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Public
     
-    public func setupUser(user: User) {
+    public func setupUser(user: UserOld) {
         fullNameLabel.text = user.name
         statusLabel.text = user.status
         avatarImageView.image = user.avatar

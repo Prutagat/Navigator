@@ -36,10 +36,13 @@ class LoginViewController: UIViewController {
         return imageView
     }()
 
-    private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "Duck" )
-    private var passwordTextFields = CustomTextField(placeholderText: "Пароль", isSecureTextEntry: true)
+    private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "a.v.golovanov@icloud.com" )
+    private var passwordTextFields = CustomTextField(placeholderText: "Пароль", text: "Ghbdtn1324", isSecureTextEntry: true)
     private lazy var loginButton = CustomButton(title: "Войти", cornerRadius: 10) { [weak self] in
         self?.logIn()
+    }
+    private lazy var signUpButton = CustomButton(title: "Зарегистрироваться", cornerRadius: 10) { [weak self] in
+        self?.signUp()
     }
     private lazy var choosePasswordButton = CustomButton(title: "Подобрать пароль", cornerRadius: 10) {  [weak self] in
         self?.choosePassword()
@@ -99,6 +102,12 @@ class LoginViewController: UIViewController {
         scrollView.contentInset.bottom = 0.0
     }
     
+    @objc private func passwordChanged() {
+        choosePasswordButton.isHidden = !passwordTextFields.text!.isEmpty
+        loginButton.isEnabled = !passwordTextFields.text!.isEmpty
+        signUpButton.isEnabled = !passwordTextFields.text!.isEmpty
+    }
+    
     // MARK: - Private
         
     private func setupView() {
@@ -106,6 +115,8 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
+        
+        passwordTextFields.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
     
     private func addSubviews() {
@@ -114,8 +125,10 @@ class LoginViewController: UIViewController {
         contentView.addSubview(logoImageView)
         contentView.addSubview(authorizationFields)
         contentView.addSubview(loginButton)
+        contentView.addSubview(signUpButton)
         contentView.addSubview(choosePasswordButton)
         contentView.addSubview(activityIndicator)
+        choosePasswordButton.isHidden = true
     }
     
     private func setupConstraints() {
@@ -147,7 +160,12 @@ class LoginViewController: UIViewController {
             loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
             
-            choosePasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
+            signUpButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
+            signUpButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            signUpButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            signUpButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            choosePasswordButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 16),
             choosePasswordButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             choosePasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             choosePasswordButton.heightAnchor.constraint(equalToConstant: 50),
@@ -182,12 +200,54 @@ class LoginViewController: UIViewController {
     }
 
     private func logIn() {
-        
         let login = mailTextFields.text!
         let password = passwordTextFields.text!
         
-        guard let userIsCorrect = loginDelegate?.check(login: login, password: password) else { return coordinator.presentError() }
-        coordinator.showTabBarController(user: userIsCorrect)
+        loginDelegate?.checkCredentials(email: login, password: password) { [weak self] result in
+            switch result {
+            case .success(let user):
+                guard let profileUser = CurrentUserService().getUser() else { return }
+                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
+                profileUser.status = user.email
+                self?.coordinator.showTabBarController(user: profileUser)
+            case .failure(let failure):
+                let textError: String
+                switch failure {
+                case let .custom(text):
+                    textError = text
+                case .notAuthorized:
+                    textError = "пользователь не авторизован"
+                }
+                self?.coordinator.presentAlert(title: "Ошибка", message: textError)
+                self?.loginButton.isEnabled = false
+            }
+        }
+    }
+    
+    private func signUp() {
+        let login = mailTextFields.text!
+        let password = passwordTextFields.text!
+        
+        loginDelegate?.signUp(email: login, password: password) { [weak self] result in
+            switch result {
+            case .success(let user):
+                guard let profileUser = CurrentUserService().getUser() else { return }
+                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
+                profileUser.status = user.email
+                self?.coordinator.showTabBarController(user: profileUser)
+                self?.coordinator.presentAlert(title: "Успешно", message: "Вы зарегистрированы")
+            case .failure(let failure):
+                let textError: String
+                switch failure {
+                case let .custom(text):
+                    textError = text
+                case .notAuthorized:
+                    textError = "пользователь не авторизован"
+                }
+                self?.coordinator.presentAlert(title: "Ошибка", message: textError)
+                self?.signUpButton.isEnabled = false
+            }
+        }
     }
     
     private func choosePassword() {
@@ -223,14 +283,14 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
-protocol LoginViewControllerDelegate {
-    func check(login: String, password: String) -> User?
+protocol LoginViewControllerDelegate: CheckerServiceProtocol {
+    func check(login: String, password: String) -> UserOld?
 }
 
 struct LoginInspector: LoginViewControllerDelegate {
-    func check(login: String, password: String) -> User? {
+    func check(login: String, password: String) -> UserOld? {
         
-        guard let userIsCorrect = try? Checker.shared.check(login: login, password: password) else { preconditionFailure("Поля не заполнены!") }
+        let userIsCorrect = Checker.shared.check(login: login, password: password)
         
         if userIsCorrect {
 #if DEBUG
@@ -238,13 +298,13 @@ struct LoginInspector: LoginViewControllerDelegate {
 #else
             let user = TestUserService().getUser(login: login, password: password)
 #endif
-            
             if let userAutorized = user {
                 return userAutorized
             }
         }
         return nil
     }
+    
 }
 
 protocol LoginFactory {

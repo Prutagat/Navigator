@@ -7,7 +7,7 @@ class ProfileViewController: UIViewController {
     // MARK: - parametrs
     
     var coordinator: ProfileCoordinator
-    private var user: User
+    private var user: UserOld
     
     // MARK: - Subviews
     
@@ -29,7 +29,7 @@ class ProfileViewController: UIViewController {
         setupConstraints()
     }
     
-    init(coordinator: ProfileCoordinator, user: User) {
+    init(coordinator: ProfileCoordinator, user: UserOld) {
         self.coordinator = coordinator
         self.user = user
         super.init(nibName:nil, bundle:nil)

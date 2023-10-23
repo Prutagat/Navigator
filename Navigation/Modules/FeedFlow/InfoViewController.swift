@@ -122,7 +122,5 @@ extension InfoViewController: UITableViewDataSource {
 
 extension InfoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let controller = YoutubeVideoView(url: people[indexPath.row].URL)
-//        present(controller, animated: true)
     }
 }
