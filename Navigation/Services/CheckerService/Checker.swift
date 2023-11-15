@@ -20,10 +20,8 @@ final class Checker {
     
     private init() {}
     
-    func check(login: String, password: String) throws -> Bool {
-        if login == "" && password == "" {
-            throw ApiError.isEmpty
-        } else if login == self.login && password == self.password {
+    func check(login: String, password: String) -> Bool {
+        if login == self.login && password == self.password {
             return true
         } else {
             return false

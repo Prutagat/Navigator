@@ -33,13 +33,13 @@ final class LoginCoordinator: Coordinatable {
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    func showTabBarController(user: User) {
+    func showTabBarController(user: UserOld) {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController, parentCoordinator: self, user: user)
         tabBarCoordinator.start()
     }
     
-    func presentError() {
-        let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин и (или) пароль", preferredStyle: .alert)
+    func presentAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "Понял", style: .default)
         alertController.addAction(okBtn)
         navigationController.present(alertController, animated: true)

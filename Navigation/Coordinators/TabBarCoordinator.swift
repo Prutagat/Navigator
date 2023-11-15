@@ -11,9 +11,9 @@ final class TabBarCoordinator: Coordinatable {
     var navigationController: UINavigationController
     private(set) var childCoordinators: [Coordinatable] = []
     private let parentCoordinator: Coordinatable
-    private let user: User
+    private let user: UserOld
     
-    init(navigationController: UINavigationController, parentCoordinator: Coordinatable, user: User) {
+    init(navigationController: UINavigationController, parentCoordinator: Coordinatable, user: UserOld) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.user = user

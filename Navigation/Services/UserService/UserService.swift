@@ -7,7 +7,7 @@
 
 import UIKit
 
-class User {
+class UserOld {
     var login: String
     var password: String
     var name: String
@@ -24,18 +24,21 @@ class User {
 }
 
 protocol UserService {
-    var user: User { get }
-    func getUser(login: String, password: String) -> User?
+    var user: UserOld { get }
+    func getUser(login: String, password: String) -> UserOld?
 }
 
 extension UserService {
-    func getUser(login: String, password: String) -> User? {
+    func getUser(login: String, password: String) -> UserOld? {
         return login == user.login && password == user.password ? user : nil
+    }
+    func getUser() -> UserOld? {
+        return user
     }
 }
 
 class CurrentUserService: UserService {
-    let user = User(
+    let user = UserOld(
         login: "Duck",
         password: "",
         name: "Скрудж Макдак",
@@ -45,7 +48,7 @@ class CurrentUserService: UserService {
 }
 
 class TestUserService: UserService {
-    let user = User(
+    let user = UserOld(
         login: "admin",
         password: "",
         name: "Админ",
