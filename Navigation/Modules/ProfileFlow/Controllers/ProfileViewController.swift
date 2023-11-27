@@ -7,17 +7,18 @@ class ProfileViewController: UIViewController {
     // MARK: - parametrs
     
     var coordinator: ProfileCoordinator
+    private var coreDataService = CoreDataService.shared
     private var user: UserOld
+    private var posts: [PostModel]
+    
     
     // MARK: - Subviews
     
-    static var tableView: UITableView =  {
+    static var postTableView: UITableView =  {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
-    private var dataSource = StorageService.PostModel.makeDataSource()
     
     // MARK: - Lifecycle
     
@@ -32,6 +33,7 @@ class ProfileViewController: UIViewController {
     init(coordinator: ProfileCoordinator, user: UserOld) {
         self.coordinator = coordinator
         self.user = user
+        self.posts = coreDataService.fetchPosts(favorite: nil)
         super.init(nibName:nil, bundle:nil)
     }
     
@@ -51,26 +53,26 @@ class ProfileViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(Self.tableView)
+        view.addSubview(Self.postTableView)
         
     }
     
     private func setupTable() {
-        Self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
-        Self.tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
-        Self.tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
-        Self.tableView.delegate = self
-        Self.tableView.dataSource = self
+        Self.postTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
+        Self.postTableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
+        Self.postTableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
+        Self.postTableView.delegate = self
+        Self.postTableView.dataSource = self
     }
     
     private func setupConstraints() {
         let safeAreaGuide = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            Self.tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
-            Self.tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
-            Self.tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            Self.tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
+            Self.postTableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
+            Self.postTableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            Self.postTableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            Self.postTableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
         ])
     }
     
@@ -87,7 +89,7 @@ extension ProfileViewController: UITableViewDataSource {
         case 0:
             return 1
         default:
-            return dataSource.count
+            return posts.count
         }
     }
     
@@ -112,7 +114,7 @@ extension ProfileViewController: UITableViewDataSource {
             
         }
         
-        let post = dataSource[indexPath.row]
+        let post = posts[indexPath.row]
         cell.configure(with: post)
         
         return cell
