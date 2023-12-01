@@ -107,8 +107,8 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         
         avatarImageView.isUserInteractionEnabled = false
         
-        ProfileViewController.tableView.isScrollEnabled = false
-        ProfileViewController.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = false
+        ProfileViewController.postTableView.isScrollEnabled = false
+        ProfileViewController.postTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = false
         
         avatarOriginPoint = avatarImageView.center
         let scale = UIScreen.main.bounds.width / avatarImageView.bounds.width
@@ -137,8 +137,8 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
                 self.avatarImageView.layer.cornerRadius = self.avatarImageView.frame.width / 2
                 self.avatarBackground.alpha = 0
         } completion: { _ in
-            ProfileViewController.tableView.isScrollEnabled = true
-            ProfileViewController.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = true
+            ProfileViewController.postTableView.isScrollEnabled = true
+            ProfileViewController.postTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = true
             self.avatarImageView.isUserInteractionEnabled = true
         }
     }
