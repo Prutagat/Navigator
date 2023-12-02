@@ -71,9 +71,8 @@ final class PostTableViewCell: UITableViewCell {
         let coreDataService = CoreDataService.shared
         
         if let post = postModel {
-            let result = coreDataService.savePost(post: post)
-            if result {
-                postModel!.favorite = !post.favorite
+            coreDataService.backgroundSavePost(post: post) { result in
+                print(result)
             }
         }
     }

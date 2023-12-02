@@ -34,6 +34,9 @@ class ProfileViewController: UIViewController {
         self.coordinator = coordinator
         self.user = user
         self.posts = coreDataService.fetchPosts(favorite: nil)
+        if posts.count != 4 {
+            self.posts = PostModel.makePosts()
+        }
         super.init(nibName:nil, bundle:nil)
     }
     

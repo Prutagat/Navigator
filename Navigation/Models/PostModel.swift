@@ -39,7 +39,9 @@ struct PostModel {
 
 extension PostModel {
     public static func makePosts() -> [PostModel] {
-        [
+        let coreDataService = CoreDataService.shared
+        
+        let posts = [
             PostModel(
                 postId: "1",
                 favorite: false,
@@ -77,5 +79,11 @@ extension PostModel {
                 views: 1213
             )
         ]
+        
+        posts.forEach {
+            coreDataService.backgroundSavePost(post: $0) { result in print(result)}
+        }
+        
+        return posts
     }
 }
