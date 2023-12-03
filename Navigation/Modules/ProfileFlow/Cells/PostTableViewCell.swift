@@ -70,10 +70,17 @@ final class PostTableViewCell: UITableViewCell {
     @objc private func didDoubleTapOnPost(recognizer: UITapGestureRecognizer) {
         let coreDataService = CoreDataService.shared
         
-        if let post = postModel {
-            coreDataService.backgroundSavePost(post: post) { result in
-                print(result)
+        if let postModel {
+            var post = postModel
+            post.favorite = !post.favorite
+            
+            let result = coreDataService.updatePost(post: post)
+            if result {
+                self.postModel = post
             }
+//            coreDataService.backgroundSavePost(post: post) { result in
+//                print(result)
+//            }
         }
     }
     
@@ -109,6 +116,24 @@ final class PostTableViewCell: UITableViewCell {
         authorLabel.text = post.author
         descriptionLabel.text = post.postDescription
         ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage)!, filter: .allCases.randomElement() ?? .noir) { image in
+            imagePost.image = image
+        }
+        likesLabel.text = "Лайки: \(String(post.likes))"
+        viewsLabel.text = "Просмотры: \(String(post.views))"
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didDoubleTapOnPost)
+        )
+        tapGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(tapGesture)
+    }
+    
+    func configure(with post: PostModelCoreData) {
+        postModel = PostModel(postModelCoreData: post)
+        authorLabel.text = post.author
+        descriptionLabel.text = post.postDescription
+        ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage ?? "")!, filter: .allCases.randomElement() ?? .noir) { image in
             imagePost.image = image
         }
         likesLabel.text = "Лайки: \(String(post.likes))"

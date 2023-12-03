@@ -3,10 +3,10 @@
     <entity name="PostModelCoreData" representedClassName="PostModelCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="author" attributeType="String"/>
         <attribute name="favorite" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="likes" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nameImage" attributeType="String"/>
-        <attribute name="postDescription" optional="YES" attributeType="String"/>
+        <attribute name="postDescription" attributeType="String"/>
         <attribute name="postId" attributeType="String"/>
-        <attribute name="views" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="views" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
 </model>

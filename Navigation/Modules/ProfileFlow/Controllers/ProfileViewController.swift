@@ -33,7 +33,7 @@ class ProfileViewController: UIViewController {
     init(coordinator: ProfileCoordinator, user: UserOld) {
         self.coordinator = coordinator
         self.user = user
-        self.posts = coreDataService.fetchPosts(favorite: nil)
+        self.posts = coreDataService.fetchPosts()
         if posts.count != 4 {
             self.posts = PostModel.makePosts()
         }
