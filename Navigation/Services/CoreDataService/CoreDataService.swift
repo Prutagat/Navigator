@@ -17,12 +17,26 @@ protocol CoreDataServiceProtocol {
     func updatePost(post: PostModel) -> Bool
 }
 
+protocol BackgroundCoreDataServiceProtocol {
+    func backgroundSavePost(post: PostModel, completion: @escaping (Bool) -> Void)
+    func backgroundFetchPosts(format: String, value: CVarArg, completion: @escaping ([PostModel]) -> Void)
+    func backgroundRemovePost(post: PostModel, completion: @escaping (Bool) -> Void)
+    func backgroundUpdatePost(post: PostModel, completion: @escaping (Bool) -> Void)
+}
+
 final class CoreDataService {
     static let shared = CoreDataService()
     
     private lazy var context: NSManagedObjectContext = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
+    }()
+    
+    private lazy var backgroundContext: NSManagedObjectContext = {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        context.persistentStoreCoordinator = appDelegate.persistentContainer.persistentStoreCoordinator
+        return context
     }()
     
     private init() {}
@@ -39,7 +53,7 @@ extension CoreDataService: CoreDataServiceProtocol {
     
     func savePost(post: PostModel) -> Bool {
         if !fetchPosts(postId: post.postId).isEmpty {
-            let result = removePost(post: post)
+            _ = removePost(post: post)
         }
         
         let model = PostModelCoreData(context: context)
@@ -136,5 +150,142 @@ extension CoreDataService: CoreDataServiceProtocol {
             return false
         }
     }
+}
     
+extension CoreDataService: BackgroundCoreDataServiceProtocol {
+    
+    func backgroundSavePost(post: PostModel, completion: @escaping (Bool) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self else {
+                completion(false)
+                return
+            }
+            
+            self.backgroundFetchPosts(format: "postId == %@", value: post.postId) { result in
+                if result.isEmpty {
+                    let model = PostModelCoreData(context: self.backgroundContext)
+                    model.postId = post.postId
+                    model.favorite = !post.favorite
+                    model.author = post.author
+                    model.nameImage = post.nameImage
+                    model.postDescription = post.postDescription
+                    model.likes = post.likes
+                    model.views = post.views
+                    
+                    do {
+                        try self.backgroundContext.save()
+                        self.context.perform {
+                            completion(true)
+                        }
+                    } catch {
+                        print(error.localizedDescription)
+                        self.context.perform {
+                            completion(false)
+                        }
+                    }
+                    
+                    guard self.backgroundContext.hasChanges else {
+                        self.context.perform {
+                            completion(false)
+                        }
+                        return
+                    }
+                } else {
+                    self.backgroundUpdatePost(post: post) { result in
+                        self.context.perform {
+                            completion(result)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func backgroundFetchPosts(format: String = "", value: CVarArg = false, completion: @escaping ([PostModel]) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self else {
+                completion([])
+                return
+            }
+            
+            let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
+            
+            if !format.isEmpty {
+                fetchRequest.predicate = NSPredicate(format: format, value)
+            }
+            
+            do {
+                var postsModels: [PostModel] = []
+                let postsModelCoreData: [PostModelCoreData] = try self.backgroundContext.fetch(fetchRequest)
+                postsModelCoreData.forEach({postsModels.append(PostModel(postModelCoreData: $0)) })
+                self.context.perform {
+                    completion(postsModels)
+                }
+            } catch {
+                print(error.localizedDescription)
+                self.context.perform {
+                    completion([])
+                }
+            }
+        }
+    }
+    
+    func backgroundRemovePost(post: PostModel, completion: @escaping (Bool) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self else {
+                completion(false)
+                return
+            }
+            
+            let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "postId == %@", post.postId)
+            
+            do {
+                let postsModelCoreData: [PostModelCoreData] = try self.backgroundContext.fetch(fetchRequest)
+                postsModelCoreData.forEach({self.backgroundContext.delete($0)})
+                try self.backgroundContext.save()
+                self.context.perform {
+                    completion(true)
+                }
+            } catch {
+                print(error.localizedDescription)
+                self.context.perform {
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    func backgroundUpdatePost(post: PostModel, completion: @escaping (Bool) -> Void) {
+        backgroundContext.perform { [weak self] in
+            guard let self else {
+                completion(false)
+                return
+            }
+            
+            let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "postId == %@", post.postId)
+            
+            do {
+                let postsModelCoreData: [PostModelCoreData] = try self.backgroundContext.fetch(fetchRequest)
+                postsModelCoreData.forEach({
+                    $0.favorite = !post.favorite
+                    $0.author = post.author
+                    $0.postDescription = post.postDescription
+                    $0.nameImage = post.nameImage
+                    $0.likes = post.likes
+                    $0.views = post.views
+                })
+                try self.backgroundContext.save()
+                self.context.perform {
+                    completion(true)
+                }
+            } catch {
+                print(error.localizedDescription)
+                self.context.perform {
+                    completion(false)
+                }
+            }
+        }
+    }
 }

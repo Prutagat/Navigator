@@ -27,4 +27,22 @@ final class FavoritePostsCoordinator: Coordinatable {
             image: UIImage(systemName: "star"),
             tag: 1)
     }
+    
+    func findAuthor( completion: @escaping (String) -> Void) {
+        var nameFolderTextField = UITextField()
+        let alertController = UIAlertController(title: "Введите автора", message: "", preferredStyle: .alert)
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+        let okBtn = UIAlertAction(title: "Отборать", style: .default) { action in
+            if let text = nameFolderTextField.text {
+                completion(text)
+            }
+        }
+        alertController.addAction(cancelBtn)
+        alertController.addAction(okBtn)
+        alertController.addTextField { textField in
+            textField.placeholder = "Отбираемый автор"
+            nameFolderTextField = textField
+        }
+        navigationController.present(alertController, animated: true)
+    }
 }
