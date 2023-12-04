@@ -11,8 +11,7 @@ import StorageService
 
 protocol CoreDataServiceProtocol {
     func savePost(post: PostModel) -> Bool
-    func fetchPosts(postId: String) -> [PostModel]
-    func fetchPosts(favorite: Bool?) -> [PostModel]
+    func fetchPosts(format: String, value: CVarArg) -> [PostModel]
     func removePost(post: PostModel) -> Bool
     func updatePost(post: PostModel) -> Bool
 }
@@ -27,12 +26,12 @@ protocol BackgroundCoreDataServiceProtocol {
 final class CoreDataService {
     static let shared = CoreDataService()
     
-    private lazy var context: NSManagedObjectContext = {
+    lazy var context: NSManagedObjectContext = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
     }()
     
-    private lazy var backgroundContext: NSManagedObjectContext = {
+    lazy var backgroundContext: NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context.persistentStoreCoordinator = appDelegate.persistentContainer.persistentStoreCoordinator
@@ -52,13 +51,13 @@ extension CoreDataService: NSCopying {
 extension CoreDataService: CoreDataServiceProtocol {
     
     func savePost(post: PostModel) -> Bool {
-        if !fetchPosts(postId: post.postId).isEmpty {
+        if !fetchPosts(format: "postId == %@", value: post.postId).isEmpty {
             _ = removePost(post: post)
         }
         
         let model = PostModelCoreData(context: context)
         model.postId = post.postId
-        model.favorite = !post.favorite
+        model.favorite = post.favorite
         model.author = post.author
         model.nameImage = post.nameImage
         model.postDescription = post.postDescription
@@ -76,37 +75,17 @@ extension CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    func fetchPosts(postId: String) -> [PostModel] {
+    func fetchPosts(format: String = "", value: CVarArg = true) -> [PostModel] {
         let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "postId == %@", postId)
+        
+        if !format.isEmpty {
+            fetchRequest.predicate = NSPredicate(format: format, value)
+        }
         
         do {
             var postsModels: [PostModel] = []
             let postsModelCoreData: [PostModelCoreData] = try context.fetch(fetchRequest)
             postsModelCoreData.forEach({postsModels.append(PostModel(postModelCoreData: $0)) })
-            return postsModels
-        } catch {
-            print(error.localizedDescription)
-            return []
-        }
-    }
-    
-    func fetchPosts(favorite: Bool? = false) -> [PostModel] {
-        let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
-        
-        do {
-            var postsModels: [PostModel] = []
-            let postsModelCoreData: [PostModelCoreData] = try context.fetch(fetchRequest)
-            postsModelCoreData.forEach {
-                if let favoriteFilter = favorite {
-                    if $0.favorite == favoriteFilter {
-                        postsModels.append(PostModel(postModelCoreData: $0))
-                    }
-                } else {
-                    postsModels.append(PostModel(postModelCoreData: $0))
-                }
-            }
-            
             return postsModels
         } catch {
             print(error.localizedDescription)
@@ -165,7 +144,7 @@ extension CoreDataService: BackgroundCoreDataServiceProtocol {
                 if result.isEmpty {
                     let model = PostModelCoreData(context: self.backgroundContext)
                     model.postId = post.postId
-                    model.favorite = !post.favorite
+                    model.favorite = post.favorite
                     model.author = post.author
                     model.nameImage = post.nameImage
                     model.postDescription = post.postDescription

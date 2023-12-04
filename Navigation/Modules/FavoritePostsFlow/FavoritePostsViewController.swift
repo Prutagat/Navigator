@@ -7,17 +7,18 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 final class FavoritePostsViewController: UIViewController {
     
     let coordinator: FavoritePostsCoordinator
     private var coreDataService = CoreDataService.shared
-    private var posts: [PostModel] = []
+    private var fetchedResultsController: NSFetchedResultsController<PostModelCoreData>!
     
     
     // MARK: - Subviews
     
-    private var postTableView: UITableView =  {
+    private var postsTableView: UITableView =  {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -27,7 +28,6 @@ final class FavoritePostsViewController: UIViewController {
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
         self.title = "Понравившиеся посты"
-        getFavouritePosts()
     }
     
     required init?(coder: NSCoder) {
@@ -38,25 +38,26 @@ final class FavoritePostsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupTable()
+        configureFetchedResultsController()
+        getPosts()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        getFavouritePosts()
+        getPosts()
     }
     
     // MARK: - Action
     
     @objc func byDefault(_ sender: UIBarButtonItem ) {
-        getFavouritePosts()
+        configureFetchedResultsController()
+        getPosts()
     }
     
     @objc func findAuthor(_ sender: UIBarButtonItem ) {
         coordinator.findAuthor { [weak self] result in
             guard let self else { return }
-            self.coreDataService.backgroundFetchPosts(format: "author == %@", value: result) { result in
-                self.posts = result
-                self.postTableView.reloadData()
-            }
+            self.configureFetchedResultsController(format: "author CONTAINS %@", value: result)
+            self.getPosts()
         }
     }
     
@@ -64,7 +65,6 @@ final class FavoritePostsViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .systemBackground
-        
         navigationItem.rightBarButtonItems = getRightBarButtonItems()
     }
     
@@ -75,19 +75,36 @@ final class FavoritePostsViewController: UIViewController {
     }
     
     private func setupTable() {
-        view.addSubview(postTableView)
-        postTableView.snp.makeConstraints { make in
+        view.addSubview(postsTableView)
+        postsTableView.snp.makeConstraints { make in
             make.leading.top.trailing.bottom.equalToSuperview()
         }
-        postTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
-        postTableView.delegate = self
-        postTableView.dataSource = self
+        postsTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.id)
+        postsTableView.delegate = self
+        postsTableView.dataSource = self
     }
     
-    private func getFavouritePosts() {
-        self.coreDataService.backgroundFetchPosts(format: "favorite = %d", value: true) { [weak self] result in
-            self?.posts = result
-            self?.postTableView.reloadData()
+    private func configureFetchedResultsController(format: String = "favorite = %d", value: CVarArg = true) {
+        let fetchRequest: NSFetchRequest<PostModelCoreData> = PostModelCoreData.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "postId", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = NSPredicate(format: format, value)
+        
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: coreDataService.context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController.delegate = self
+    }
+    
+    private func getPosts() {
+        do {
+            try fetchedResultsController.performFetch()
+            postsTableView.reloadData()
+        } catch {
+            print("Error")
         }
     }
     
@@ -96,7 +113,7 @@ final class FavoritePostsViewController: UIViewController {
 extension FavoritePostsViewController: UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,7 +125,7 @@ extension FavoritePostsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let post = posts[indexPath.row]
+        let post = fetchedResultsController.object(at: indexPath)
         cell.configure(with: post)
         return cell
     }
@@ -121,19 +138,44 @@ extension FavoritePostsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let post = posts[indexPath.row]
+        let post = fetchedResultsController.object(at: indexPath)
+        var postModel = PostModel(postModelCoreData: post)
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { _, _, _ in
-            self.coreDataService.backgroundUpdatePost(post: post) { result in
-                if result {
-                    self.postTableView.performBatchUpdates {
-                        self.posts.remove(at: indexPath.row)
-                        self.postTableView.deleteRows(at: [indexPath], with: .right)
-                    }
-                }
-            }
+            postModel.favorite = !postModel.favorite
+            _ = self.coreDataService.updatePost(post: postModel)
         }
         
         return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+}
+
+extension FavoritePostsViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        postsTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch type {
+        case .insert:
+            guard let newIndexPath else { return }
+            postsTableView.insertRows(at: [newIndexPath], with: .left)
+        case .delete:
+            guard let indexPath else { return }
+            postsTableView.deleteRows(at: [indexPath], with: .right)
+        case .move:
+            ()
+        case .update:
+            guard let indexPath else { return }
+            postsTableView.reloadRows(at: [indexPath], with: .fade)
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        postsTableView.endUpdates()
     }
 }
