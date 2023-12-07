@@ -6,14 +6,17 @@ class FeedViewController: UIViewController {
     let coordinator: FeedCoordinator
     private let viewModel: FeedViewModel
     
-    private lazy var firstActionButton = CustomButton(title: "Аудиопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var audioButton = CustomButton(title: "Аудиопроигрыватель", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.audio)
     }
-    private lazy var secondActionButton = CustomButton(title: "Видеопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var videoButton = CustomButton(title: "Видеопроигрыватель", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.video)
     }
-    private lazy var thirdActionButton = CustomButton(title: "Диктофон", cornerRadius: 10) { [weak self] in
+    private lazy var voiceRecorderButton = CustomButton(title: "Диктофон", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.voiceRecorder)
+    }
+    private lazy var infoButton = CustomButton(title: "Информация", cornerRadius: 10) { [weak self] in
+        self?.coordinator.present(.info)
     }
     
     private lazy var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10) { [weak self] in
@@ -39,9 +42,10 @@ class FeedViewController: UIViewController {
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 10
-        stackView.addArrangedSubview(self.firstActionButton)
-        stackView.addArrangedSubview(self.secondActionButton)
-        stackView.addArrangedSubview(self.thirdActionButton)
+        stackView.addArrangedSubview(self.audioButton)
+        stackView.addArrangedSubview(self.videoButton)
+        stackView.addArrangedSubview(self.voiceRecorderButton)
+        stackView.addArrangedSubview(self.infoButton)
         return stackView
     }()
     
@@ -84,9 +88,10 @@ class FeedViewController: UIViewController {
         view.addSubview(checkGuessButton)
         view.addSubview(activityIndicator)
         stackView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-40)
             make.width.equalTo(200)
-            make.height.equalTo(130)
+            make.height.equalTo(200)
         }
         statusLabel.snp.makeConstraints { make in
             make.top.equalTo(stackView.snp.bottom).offset(16)

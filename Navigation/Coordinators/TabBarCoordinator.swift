@@ -11,9 +11,9 @@ final class TabBarCoordinator: Coordinatable {
     var navigationController: UINavigationController
     private(set) var childCoordinators: [Coordinatable] = []
     private let parentCoordinator: Coordinatable
-    private let user: User
+    private let user: UserOld
     
-    init(navigationController: UINavigationController, parentCoordinator: Coordinatable, user: User) {
+    init(navigationController: UINavigationController, parentCoordinator: Coordinatable, user: UserOld) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.user = user
@@ -33,9 +33,11 @@ final class TabBarCoordinator: Coordinatable {
         let tabBarController = UITabBarController()
         let feedCoordinator = FeedCoordinator(navigationController: UINavigationController(), parentCoordinator: self)
         feedCoordinator.start()
+        let favoritePostsCoordinator = FavoritePostsCoordinator(navigationController: UINavigationController(), parentCoordinator: self)
+        favoritePostsCoordinator.start()
         let profileCoordinator = ProfileCoordinator(navigationController: UINavigationController(), parentCoordinator: self, user: user)
         profileCoordinator.start()
-        tabBarController.viewControllers = [feedCoordinator.navigationController, profileCoordinator.navigationController]
+        tabBarController.viewControllers = [feedCoordinator.navigationController, favoritePostsCoordinator.navigationController, profileCoordinator.navigationController]
         navigationController.pushViewController(tabBarController, animated: true)
     }
 }

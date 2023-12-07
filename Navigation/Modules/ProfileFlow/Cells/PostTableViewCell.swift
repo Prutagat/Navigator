@@ -11,9 +11,10 @@ import iOSIntPackage
 
 final class PostTableViewCell: UITableViewCell {
     
-    // MARK: - Subviews
-    
+    private var postModel: PostModel?
     static let id = "PostTableViewCell"
+    
+    // MARK: - Subviews
     
     private let authorLabel: UILabel = {
         let label = UILabel()
@@ -64,6 +65,25 @@ final class PostTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Action
+    
+    @objc private func didDoubleTapOnPost(recognizer: UITapGestureRecognizer) {
+        let coreDataService = CoreDataService.shared
+        
+        if let postModel {
+            var post = postModel
+            post.favorite = !post.favorite
+            
+            let result = coreDataService.updatePost(post: post)
+            if result {
+                self.postModel = post
+            }
+//            coreDataService.backgroundSavePost(post: post) { result in
+//                print(result)
+//            }
+        }
+    }
+    
     // MARK: - Private
     
     private func addSubviews() {
@@ -74,7 +94,7 @@ final class PostTableViewCell: UITableViewCell {
          viewsLabel].forEach({contentView.addSubview($0)})
     }
     
-    func configure(with post: StorageService.PostModel) {
+    func configure(with post: StorageService.OldPostModel) {
         authorLabel.text = post.author
         descriptionLabel.text = post.description
         ImageProcessor().processImage(sourceImage: UIImage(named: post.image)!, filter: .allCases.randomElement() ?? .noir) { image in
@@ -82,7 +102,51 @@ final class PostTableViewCell: UITableViewCell {
         }
         likesLabel.text = "Лайки: \(String(post.likes))"
         viewsLabel.text = "Просмотры: \(String(post.views))"
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didDoubleTapOnPost)
+        )
+        tapGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(tapGesture)
     }
+    
+    func configure(with post: PostModel) {
+        postModel = post
+        authorLabel.text = post.author
+        descriptionLabel.text = post.postDescription
+        ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage)!, filter: .allCases.randomElement() ?? .noir) { image in
+            imagePost.image = image
+        }
+        likesLabel.text = "Лайки: \(String(post.likes))"
+        viewsLabel.text = "Просмотры: \(String(post.views))"
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didDoubleTapOnPost)
+        )
+        tapGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(tapGesture)
+    }
+    
+    func configure(with post: PostModelCoreData) {
+        postModel = PostModel(postModelCoreData: post)
+        authorLabel.text = post.author
+        descriptionLabel.text = post.postDescription
+        ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage ?? "")!, filter: .allCases.randomElement() ?? .noir) { image in
+            imagePost.image = image
+        }
+        likesLabel.text = "Лайки: \(String(post.likes))"
+        viewsLabel.text = "Просмотры: \(String(post.views))"
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didDoubleTapOnPost)
+        )
+        tapGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(tapGesture)
+    }
+    
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
