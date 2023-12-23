@@ -46,8 +46,6 @@ final class FeedCoordinator: Coordinatable {
                 postViewController.post = Post(title: "Переопределенный")
                 navigationController.pushViewController(postViewController, animated: true)
             case .info:
-//                let infoViewController = InfoViewController(coordinator: self)
-//                navigationController.present(infoViewController, animated: true, completion: nil)
                 let infoViewController = InfoViewController(coordinator: self)
                 navigationController.pushViewController(infoViewController, animated: true)
             case .audio:

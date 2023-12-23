@@ -47,6 +47,9 @@ class LoginViewController: UIViewController {
     private lazy var choosePasswordButton = CustomButton(title: "Подобрать пароль", cornerRadius: 10) {  [weak self] in
         self?.choosePassword()
     }
+    private lazy var openMapButton = CustomButton(title: "Показать карту", cornerRadius: 10) { [weak self] in
+        self?.coordinator.presentMapViewController()
+    }
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
         let stackView = UIStackView()
@@ -115,6 +118,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
+        title = "Окно авторизации"
         
         passwordTextFields.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
@@ -128,6 +132,7 @@ class LoginViewController: UIViewController {
         contentView.addSubview(signUpButton)
         contentView.addSubview(choosePasswordButton)
         contentView.addSubview(activityIndicator)
+        contentView.addSubview(openMapButton)
         choosePasswordButton.isHidden = true
     }
     
@@ -172,7 +177,13 @@ class LoginViewController: UIViewController {
             choosePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: passwordTextFields.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: passwordTextFields.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: passwordTextFields.centerYAnchor),
+            
+            openMapButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 16),
+            openMapButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            openMapButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            openMapButton.heightAnchor.constraint(equalToConstant: 50),
+            openMapButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
     

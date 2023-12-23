@@ -44,4 +44,9 @@ final class LoginCoordinator: Coordinatable {
         alertController.addAction(okBtn)
         navigationController.present(alertController, animated: true)
     }
+    
+    func presentMapViewController() {
+        let mapViewController = MapViewController(coordinator: self)
+        navigationController.pushViewController(mapViewController, animated: true)
+    }
 }
