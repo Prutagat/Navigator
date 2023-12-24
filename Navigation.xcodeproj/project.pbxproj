@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81006D072B279A1F00C41D46 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81006D062B279A1F00C41D46 /* MapViewController.swift */; };
 		810AB3AD2A60185500269411 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810AB3AC2A60185500269411 /* Checker.swift */; };
 		81161B712A2E74E600805507 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81161B702A2E74E600805507 /* LoginViewController.swift */; };
 		811B83D42A1E81470017B96A /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811B83D32A1E81470017B96A /* PostTableViewCell.swift */; };
@@ -115,6 +116,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		81006D062B279A1F00C41D46 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		810AB3AC2A60185500269411 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 		81161B702A2E74E600805507 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		811B83D32A1E81470017B96A /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
@@ -439,6 +441,7 @@
 			children = (
 				81C742DD2AB31FE5001285D8 /* ChoosePasswordService */,
 				81161B702A2E74E600805507 /* LoginViewController.swift */,
+				81006D062B279A1F00C41D46 /* MapViewController.swift */,
 			);
 			path = LoginFlow;
 			sourceTree = "<group>";
@@ -561,11 +564,11 @@
 			};
 			buildConfigurationList = 81B482092A02CFEA002E8FA3 /* Build configuration list for PBXProject "Navigation" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ru,
 			);
 			mainGroup = 81B482052A02CFEA002E8FA3;
 			packageReferences = (
@@ -650,6 +653,7 @@
 				81646E022A703E8B006E027B /* CustomButton.swift in Sources */,
 				81B89AA72B05601E0028A987 /* ModelCoreDataService.xcdatamodeld in Sources */,
 				81DD5AAE2A766AB8004E0E3D /* CustomTextField.swift in Sources */,
+				81006D072B279A1F00C41D46 /* MapViewController.swift in Sources */,
 				81B89A982B054C770028A987 /* FavoritePostsCoordinator.swift in Sources */,
 				8178CBC12AC21B86009BFB4F /* VideoViewController.swift in Sources */,
 				8178CBC72AC48CFE009BFB4F /* NetworkService.swift in Sources */,
@@ -855,7 +859,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -909,7 +913,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -929,9 +933,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определния места пользователя требуется доступ к геолокации";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Для записи требуется предоставить доступ к микрофону";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -960,9 +966,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определния места пользователя требуется доступ к геолокации";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Для записи требуется предоставить доступ к микрофону";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
