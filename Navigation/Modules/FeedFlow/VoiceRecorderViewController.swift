@@ -21,11 +21,11 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     private var audioPlayer: AVAudioPlayer!
     var audioURL: URL?
     
-    private lazy var recordButton = CustomButton(title: " Запись", cornerRadius: 10, image: UIImage(systemName: "record.circle.fill")!) { [weak self] in
+    private lazy var recordButton = CustomButton(title: " Record", cornerRadius: 10, image: UIImage(systemName: "record.circle.fill")!) { [weak self] in
         self?.pressButton(button:.record)
         
     }
-    private lazy var playButton = CustomButton(title: " Воспроизвести", cornerRadius: 10, image: UIImage(systemName: "play.fill")!) { [weak self] in
+    private lazy var playButton = CustomButton(title: " Play", cornerRadius: 10, image: UIImage(systemName: "play.fill")!) { [weak self] in
         self?.pressButton(button:.play)
         
     }
@@ -42,7 +42,7 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray4
-        title = "Диктофон"
+        title = "Voice recorder".localized
         audioPermission()
         setupUI()
     }
@@ -78,7 +78,7 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     
     private func playSound() {
         guard let URL = audioURL else {
-            coordinator.present(.attention("Не удалось получить запись, возможно вы еще ничего не записали."))
+            coordinator.present(.attention("Couldn't get the recording, maybe you haven't recorded anything yet."))
             return
         }
         do {
@@ -100,18 +100,20 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     }
     
     private func audioPermission() {
+        
         recordingSession = AVAudioSession.sharedInstance()
         do {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
+            
             recordingSession.requestRecordPermission() { [weak self] granted in
                 DispatchQueue.main.async {
-                    let message = granted ? "Доступ к микрофону разрешен" : "Доступ к микрофону не разрешен"
+                    let message = granted ? "Access to the microphone is allowed" : "Microphone access is not allowed"
                     self?.coordinator.present(.attention(message))
                 }
             }
         } catch {
-            coordinator.present(.attention("Не удалось изменить сессию записи"))
+            coordinator.present(.attention("The recording session could not be changed"))
         }
     }
     
@@ -127,7 +129,7 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     
     func startRecording() {
         view.backgroundColor = UIColor(red: 0.6, green: 0, blue: 0, alpha: 1)
-        recordButton.setTitle(" Остановить запись", for: .normal)
+        recordButton.setTitle(" Stop recording", for: .normal)
         audioURL = VoiceRecorderViewController.getWhistleURL()
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -152,10 +154,10 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
         whistleRecorder = nil
 
         if success {
-            recordButton.setTitle(" Запись", for: .normal)
+            recordButton.setTitle(" Record", for: .normal)
         } else {
-            recordButton.setTitle(" Запись", for: .normal)
-            coordinator.present(.attention("Возникли проблемы при записи с микрофона. Попробуйте снова"))
+            recordButton.setTitle(" Record", for: .normal)
+            coordinator.present(.attention("There were problems recording from the microphone. Try agains"))
         }
     }
 }

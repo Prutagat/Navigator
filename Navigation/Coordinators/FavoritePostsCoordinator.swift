@@ -23,16 +23,16 @@ final class FavoritePostsCoordinator: Coordinatable {
         let viewController = FavoritePostsViewController(coordinator: self)
         navigationController.setViewControllers([viewController], animated: true)
         navigationController.tabBarItem = UITabBarItem(
-            title: "Понравившиеся посты",
+            title: "Favorite posts".localized,
             image: UIImage(systemName: "star"),
             tag: 1)
     }
     
     func findAuthor( completion: @escaping (String) -> Void) {
         var nameFolderTextField = UITextField()
-        let alertController = UIAlertController(title: "Введите автора", message: "", preferredStyle: .alert)
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
-        let okBtn = UIAlertAction(title: "Отборать", style: .default) { action in
+        let alertController = UIAlertController(title: "Enter author".localized, message: "", preferredStyle: .alert)
+        let cancelBtn = UIAlertAction(title: "Cancel".localized, style: .cancel)
+        let okBtn = UIAlertAction(title: "Select".localized, style: .default) { action in
             if let text = nameFolderTextField.text {
                 completion(text)
             }
@@ -40,7 +40,7 @@ final class FavoritePostsCoordinator: Coordinatable {
         alertController.addAction(cancelBtn)
         alertController.addAction(okBtn)
         alertController.addTextField { textField in
-            textField.placeholder = "Отбираемый автор"
+            textField.placeholder = "Selected author".localized
             nameFolderTextField = textField
         }
         navigationController.present(alertController, animated: true)

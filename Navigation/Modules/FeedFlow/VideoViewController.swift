@@ -39,7 +39,7 @@ final class VideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray4
-        title = "Видеопроигрыватель"
+        title = "Video Player".localized
         getVideos()
         setupUI()
     }

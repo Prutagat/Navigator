@@ -100,8 +100,8 @@ final class PostTableViewCell: UITableViewCell {
         ImageProcessor().processImage(sourceImage: UIImage(named: post.image)!, filter: .allCases.randomElement() ?? .noir) { image in
             imagePost.image = image
         }
-        likesLabel.text = "Лайки: \(String(post.likes))"
-        viewsLabel.text = "Просмотры: \(String(post.views))"
+        likesLabel.text = String.localizedStringWithFormat("likes_count".localized, post.likes)
+        viewsLabel.text = String.localizedStringWithFormat("views_count".localized, post.views)
         
         let tapGesture = UITapGestureRecognizer(
             target: self,
@@ -118,8 +118,8 @@ final class PostTableViewCell: UITableViewCell {
         ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage)!, filter: .allCases.randomElement() ?? .noir) { image in
             imagePost.image = image
         }
-        likesLabel.text = "Лайки: \(String(post.likes))"
-        viewsLabel.text = "Просмотры: \(String(post.views))"
+        likesLabel.text = String.localizedStringWithFormat("likes_count".localized, post.likes)
+        viewsLabel.text = String.localizedStringWithFormat("views_count".localized, post.views)
         
         let tapGesture = UITapGestureRecognizer(
             target: self,
@@ -136,8 +136,8 @@ final class PostTableViewCell: UITableViewCell {
         ImageProcessor().processImage(sourceImage: UIImage(named: post.nameImage ?? "")!, filter: .allCases.randomElement() ?? .noir) { image in
             imagePost.image = image
         }
-        likesLabel.text = "Лайки: \(String(post.likes))"
-        viewsLabel.text = "Просмотры: \(String(post.views))"
+        likesLabel.text = String.localizedStringWithFormat("likes_count".localized, post.likes)
+        viewsLabel.text = String.localizedStringWithFormat("views_count".localized, post.views)
         
         let tapGesture = UITapGestureRecognizer(
             target: self,

@@ -25,7 +25,7 @@ final class ProfileCoordinator: Coordinatable {
         let viewController = ProfileViewController(coordinator: self, user: user)
         navigationController.setViewControllers([viewController], animated: true)
         navigationController.tabBarItem = UITabBarItem(
-            title: "Профиль",
+            title: "Profile".localized,
             image: UIImage(systemName: "person"),
             tag: 1)
     }

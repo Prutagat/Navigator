@@ -36,18 +36,18 @@ class LoginViewController: UIViewController {
         return imageView
     }()
 
-    private var mailTextFields = CustomTextField(placeholderText: "Почта", text: "a.v.golovanov@icloud.com" )
-    private var passwordTextFields = CustomTextField(placeholderText: "Пароль", text: "Ghbdtn1324", isSecureTextEntry: true)
-    private lazy var loginButton = CustomButton(title: "Войти", cornerRadius: 10) { [weak self] in
+    private var mailTextFields = CustomTextField(placeholderText: "Mail", text: "a.v.golovanov@icloud.com" )
+    private var passwordTextFields = CustomTextField(placeholderText: "Password", text: "Ghbdtn1324", isSecureTextEntry: true)
+    private lazy var loginButton = CustomButton(title: "Login In", cornerRadius: 10) { [weak self] in
         self?.logIn()
     }
-    private lazy var signUpButton = CustomButton(title: "Зарегистрироваться", cornerRadius: 10) { [weak self] in
+    private lazy var signUpButton = CustomButton(title: "Sing Up", cornerRadius: 10) { [weak self] in
         self?.signUp()
     }
-    private lazy var choosePasswordButton = CustomButton(title: "Подобрать пароль", cornerRadius: 10) {  [weak self] in
+    private lazy var choosePasswordButton = CustomButton(title: "Choose Password", cornerRadius: 10) {  [weak self] in
         self?.choosePassword()
     }
-    private lazy var openMapButton = CustomButton(title: "Показать карту", cornerRadius: 10) { [weak self] in
+    private lazy var openMapButton = CustomButton(title: "Open Map", cornerRadius: 10) { [weak self] in
         self?.coordinator.presentMapViewController()
     }
     
@@ -118,7 +118,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
-        title = "Окно авторизации"
+        title = "Authorization window".localized
         
         passwordTextFields.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
@@ -227,9 +227,9 @@ class LoginViewController: UIViewController {
                 case let .custom(text):
                     textError = text
                 case .notAuthorized:
-                    textError = "пользователь не авторизован"
+                    textError = "the user is not logged in"
                 }
-                self?.coordinator.presentAlert(title: "Ошибка", message: textError)
+                self?.coordinator.presentAlert(title: "Error", message: textError)
                 self?.loginButton.isEnabled = false
             }
         }
@@ -246,16 +246,16 @@ class LoginViewController: UIViewController {
                 profileUser.name = user.name.isEmpty ? profileUser.name : user.name
                 profileUser.status = user.email
                 self?.coordinator.showTabBarController(user: profileUser)
-                self?.coordinator.presentAlert(title: "Успешно", message: "Вы зарегистрированы")
+                self?.coordinator.presentAlert(title: "Successfully", message: "You are registered")
             case .failure(let failure):
                 let textError: String
                 switch failure {
                 case let .custom(text):
                     textError = text
                 case .notAuthorized:
-                    textError = "пользователь не авторизован"
+                    textError = "The user is not logged in"
                 }
-                self?.coordinator.presentAlert(title: "Ошибка", message: textError)
+                self?.coordinator.presentAlert(title: "Error", message: textError)
                 self?.signUpButton.isEnabled = false
             }
         }

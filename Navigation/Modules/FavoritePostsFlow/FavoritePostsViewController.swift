@@ -27,7 +27,7 @@ final class FavoritePostsViewController: UIViewController {
     init(coordinator: FavoritePostsCoordinator) {
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
-        self.title = "Понравившиеся посты"
+        self.title = "Favorite posts".localized
     }
     
     required init?(coder: NSCoder) {
@@ -141,7 +141,7 @@ extension FavoritePostsViewController: UITableViewDelegate {
         let post = fetchedResultsController.object(at: indexPath)
         var postModel = PostModel(postModelCoreData: post)
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { _, _, _ in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized) { _, _, _ in
             postModel.favorite = !postModel.favorite
             _ = self.coreDataService.updatePost(post: postModel)
         }

@@ -30,8 +30,8 @@ final class CustomTextField: UITextField {
         returnKeyType = UIReturnKeyType.done
         clearButtonMode = UITextField.ViewMode.whileEditing
         contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        placeholder = placeholderText
+        placeholder = placeholderText.localized
         isSecureTextEntry = isSecure
-        text = textDefault
+        text = textDefault.localized
     }
 }
