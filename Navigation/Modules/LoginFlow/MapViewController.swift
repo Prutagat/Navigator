@@ -24,13 +24,13 @@ final class MapViewController: UIViewController {
     }()
     
     private var segmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Схема","Спутник","Гибрид"])
+        let segmentedControl = UISegmentedControl(items: ["Scheme".localized, "Satellite".localized, "Hybrid".localized])
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
     
-    private lazy var routeButton = CustomButton(title: "Построить маршрут", cornerRadius: 10) { [weak self] in
+    private lazy var routeButton = CustomButton(title: "Build a route", cornerRadius: 10) { [weak self] in
         self?.getRoute()
     }
     

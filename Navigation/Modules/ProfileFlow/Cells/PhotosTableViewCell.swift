@@ -20,7 +20,7 @@ class PhotosTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.numberOfLines = 1
-        label.text = "Фотографии"
+        label.text = "Photos".localized
         return label
     }()
     

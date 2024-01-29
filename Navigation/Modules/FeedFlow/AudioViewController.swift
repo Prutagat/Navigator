@@ -41,7 +41,7 @@ final class AudioViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray4
-        title = "Аудиопроигрыватель"
+        title = "Audio Player".localized
         getSongs()
         setupAudioPlayer()
         setupUI()

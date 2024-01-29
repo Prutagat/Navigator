@@ -68,6 +68,10 @@
 		81ECCAA72ACB31B900DE670B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 81ECCAA62ACB31B900DE670B /* FirebaseFirestore */; };
 		81ECCAA92ACB421F00DE670B /* CheckerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECCAA82ACB421F00DE670B /* CheckerService.swift */; };
 		81ECCAAB2ACB59A200DE670B /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECCAAA2ACB59A200DE670B /* UserModel.swift */; };
+		81F43D9D2B66C1BF00E524CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81F43D9F2B66C1BF00E524CC /* InfoPlist.strings */; };
+		81F43DA22B66C2EB00E524CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81F43DA42B66C2EB00E524CC /* Localizable.strings */; };
+		81F43DA62B66C75700E524CC /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F43DA52B66C75700E524CC /* Localized.swift */; };
+		81F43DAA2B66E94E00E524CC /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 81F43DAC2B66E94E00E524CC /* Localizable.stringsdict */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +177,11 @@
 		81ECCAA12ACB311E00DE670B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81ECCAA82ACB421F00DE670B /* CheckerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerService.swift; sourceTree = "<group>"; };
 		81ECCAAA2ACB59A200DE670B /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		81F43D9E2B66C1BF00E524CC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		81F43DA32B66C2EB00E524CC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		81F43DA52B66C75700E524CC /* Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
+		81F43DAB2B66E94E00E524CC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		81F43DAD2B66E95100E524CC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +401,7 @@
 				81161B6B2A2E701600805507 /* Modules */,
 				81B4821A2A02CFEB002E8FA3 /* Assets.xcassets */,
 				81B4821F2A02CFEB002E8FA3 /* Info.plist */,
+				81F43DA72B66E5B000E524CC /* localized */,
 				81ECCAA12ACB311E00DE670B /* GoogleService-Info.plist */,
 			);
 			path = Navigation;
@@ -461,6 +471,17 @@
 				81C742DE2AB32007001285D8 /* ChoosePasswordService.swift */,
 			);
 			path = ChoosePasswordService;
+			sourceTree = "<group>";
+		};
+		81F43DA72B66E5B000E524CC /* localized */ = {
+			isa = PBXGroup;
+			children = (
+				81F43DA52B66C75700E524CC /* Localized.swift */,
+				81F43D9F2B66C1BF00E524CC /* InfoPlist.strings */,
+				81F43DA42B66C2EB00E524CC /* Localizable.strings */,
+				81F43DAC2B66E94E00E524CC /* Localizable.stringsdict */,
+			);
+			path = localized;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -564,11 +585,12 @@
 			};
 			buildConfigurationList = 81B482092A02CFEA002E8FA3 /* Build configuration list for PBXProject "Navigation" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = ru;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				ru,
+				en,
 			);
 			mainGroup = 81B482052A02CFEA002E8FA3;
 			packageReferences = (
@@ -607,8 +629,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8178CBBC2AC21164009BFB4F /* M83 - Couleurs.mp3 in Resources */,
+				81F43D9D2B66C1BF00E524CC /* InfoPlist.strings in Resources */,
 				8178CBBD2AC21164009BFB4F /* M83 - Go.mp3 in Resources */,
+				81F43DAA2B66E94E00E524CC /* Localizable.stringsdict in Resources */,
 				8178CBBE2AC21164009BFB4F /* M83 - Intro.mp3 in Resources */,
+				81F43DA22B66C2EB00E524CC /* Localizable.strings in Resources */,
 				8178CBBF2AC21164009BFB4F /* M83 - Nothing To Give.mp3 in Resources */,
 				8178CBBB2AC21164009BFB4F /* M83 - Midnight City.mp3 in Resources */,
 				81B4821B2A02CFEB002E8FA3 /* Assets.xcassets in Resources */,
@@ -669,6 +694,7 @@
 				81B482282A02E171002E8FA3 /* ProfileViewController.swift in Sources */,
 				81C198E12A7983FC00362ADA /* FeedViewModel.swift in Sources */,
 				81B482262A02E15F002E8FA3 /* FeedViewController.swift in Sources */,
+				81F43DA62B66C75700E524CC /* Localized.swift in Sources */,
 				81594A312A2614470084B4D8 /* PhotosCollectionViewCell.swift in Sources */,
 				81B89A962B054B790028A987 /* FavoritePostsViewController.swift in Sources */,
 				81BBF6F32A98E8C3006F5264 /* Coordinatable.swift in Sources */,
@@ -709,6 +735,34 @@
 			targetProxy = 81494C662A4CBBDB00E4FE5E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		81F43D9F2B66C1BF00E524CC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81F43D9E2B66C1BF00E524CC /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		81F43DA42B66C2EB00E524CC /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81F43DA32B66C2EB00E524CC /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		81F43DAC2B66E94E00E524CC /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81F43DAB2B66E94E00E524CC /* ru */,
+				81F43DAD2B66E95100E524CC /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		81494C5D2A4CBADD00E4FE5E /* Debug */ = {
@@ -933,8 +987,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определния места пользователя требуется доступ к геолокации";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Для записи требуется предоставить доступ к микрофону";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Geolocation access is required to determine the user's location";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To record, you need to provide access to the microphone";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -966,8 +1020,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Для определния места пользователя требуется доступ к геолокации";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Для записи требуется предоставить доступ к микрофону";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Geolocation access is required to determine the user's location";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To record, you need to provide access to the microphone";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";

@@ -6,31 +6,31 @@ class FeedViewController: UIViewController {
     let coordinator: FeedCoordinator
     private let viewModel: FeedViewModel
     
-    private lazy var audioButton = CustomButton(title: "Аудиопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var audioButton = CustomButton(title: "Audio Player", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.audio)
     }
-    private lazy var videoButton = CustomButton(title: "Видеопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var videoButton = CustomButton(title: "Video Player", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.video)
     }
-    private lazy var voiceRecorderButton = CustomButton(title: "Диктофон", cornerRadius: 10) { [weak self] in
+    private lazy var voiceRecorderButton = CustomButton(title: "Voice recorder", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.voiceRecorder)
     }
-    private lazy var infoButton = CustomButton(title: "Информация", cornerRadius: 10) { [weak self] in
+    private lazy var infoButton = CustomButton(title: "Information", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.info)
     }
     
-    private lazy var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10) { [weak self] in
+    private lazy var checkGuessButton = CustomButton(title: "Check", cornerRadius: 10) { [weak self] in
         self?.viewModel.checkWord = (self?.passwordTextField.text)!
         self?.viewModel.changeAction(.checkWordAtion)
     }
-    private var passwordTextField = CustomTextField(placeholderText: "Пароль", text: "Donald")
+    private var passwordTextField = CustomTextField(placeholderText: "Password", text: "Donald")
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
     
     private var statusLabel: UILabel = {
         let lable = UILabel()
         lable.translatesAutoresizingMaskIntoConstraints = false
         lable.clipsToBounds = true
-        lable.text = "Корректно"
+        lable.text = "Correct".localized
         return lable
     }()
     
@@ -80,7 +80,7 @@ class FeedViewController: UIViewController {
     
     private func layout() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        title = "Лента"
+        title = "Feed".localized
         view.backgroundColor = .systemGray4
         view.addSubview(stackView)
         view.addSubview(statusLabel)
@@ -129,6 +129,6 @@ class FeedViewController: UIViewController {
         }
         
         statusLabel.textColor = isCorrect ? .green : .red
-        statusLabel.text = isCorrect ? "Верно" : "Не верно"
+        statusLabel.text = (isCorrect ? "True" : "Not true").localized
     }
 }

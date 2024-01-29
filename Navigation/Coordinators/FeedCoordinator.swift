@@ -34,7 +34,7 @@ final class FeedCoordinator: Coordinatable {
         let viewController = FeedViewController(viewModel: FeedViewModel(), coordinator: self)
         navigationController.setViewControllers([viewController], animated: true)
         navigationController.tabBarItem = UITabBarItem(
-            title: "Лента",
+            title: "Feed".localized,
             image: UIImage(systemName: "newspaper"),
             tag: 0)
     }
@@ -43,7 +43,7 @@ final class FeedCoordinator: Coordinatable {
             switch presentation {
             case .post:
                 let postViewController = PostViewController(coordinator: self)
-                postViewController.post = Post(title: "Переопределенный")
+                postViewController.post = Post(title: "Redefined".localized)
                 navigationController.pushViewController(postViewController, animated: true)
             case .info:
                 let infoViewController = InfoViewController(coordinator: self)
@@ -58,9 +58,9 @@ final class FeedCoordinator: Coordinatable {
                 let voiceRecorderViewController = VoiceRecorderViewController(coordinator: self)
                 navigationController.pushViewController(voiceRecorderViewController, animated: true)
             case .autorized:
-                let alertController = UIAlertController(title: "Внимание", message: "Пароль верный", preferredStyle: .alert)
-                let okBtn = UIAlertAction(title: "ОК", style: .default)
-                let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+                let alertController = UIAlertController(title: "Attention".localized, message: "Correct".localized, preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "Ok".localized, style: .default)
+                let cancelBtn = UIAlertAction(title: "Cancel".localized, style: .cancel)
                 alertController.addAction(okBtn)
                 alertController.addAction(cancelBtn)
                 navigationController.present(alertController, animated: true)
@@ -68,22 +68,22 @@ final class FeedCoordinator: Coordinatable {
                 var message = ""
                 switch apiError {
                 case .isEmpty:
-                    message = "Пустое поле, заполните!"
+                    message = "Fill in the empty field!"
                 case .unauthorized:
-                    message = "Вы не угадали!"
+                    message = "You didn't guess right!"
                 case .notFound:
-                    message = "Не найден"
+                    message = "Not found"
                 }
-                let alertController = UIAlertController(title: "Внимание", message: message, preferredStyle: .alert)
-                let okBtn = UIAlertAction(title: "ОК", style: .default)
-                let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+                let alertController = UIAlertController(title: "Attention".localized, message: message.localized, preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "Ok".localized, style: .default)
+                let cancelBtn = UIAlertAction(title: "Cancel".localized, style: .cancel)
                 alertController.addAction(okBtn)
                 alertController.addAction(cancelBtn)
                 navigationController.present(alertController, animated: true)
             case .attention(let message):
-                let alertController = UIAlertController(title: "Внимание", message: message, preferredStyle: .alert)
-                let okBtn = UIAlertAction(title: "ОК", style: .default)
-                let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+                let alertController = UIAlertController(title: "Attention".localized, message: message.localized, preferredStyle: .alert)
+                let okBtn = UIAlertAction(title: "Ok".localized, style: .default)
+                let cancelBtn = UIAlertAction(title: "Cancel".localized, style: .cancel)
                 alertController.addAction(okBtn)
                 alertController.addAction(cancelBtn)
                 navigationController.present(alertController, animated: true)

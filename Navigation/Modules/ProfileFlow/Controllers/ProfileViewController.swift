@@ -47,7 +47,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Private
     
     private func setupView() {
-        title = "Профиль"
+        title = "Profile".localized
         #if DEBUG
             view.backgroundColor = .systemGray4
         #else
