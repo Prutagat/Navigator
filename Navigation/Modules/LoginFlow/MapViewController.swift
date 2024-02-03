@@ -79,7 +79,7 @@ final class MapViewController: UIViewController {
     
     private func setupView() {
         coordinator.navigationController.navigationBar.isHidden = false
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         routeButton.isHidden = true

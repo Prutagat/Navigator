@@ -14,7 +14,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarBackground: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.isHidden = true
         view.alpha = 0
         return view
@@ -67,7 +67,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.layer.cornerRadius = 12
         textField.clipsToBounds = true
         textField.placeholder = "Enter status".localized
-        textField.backgroundColor = .white
+        textField.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.translatesAutoresizingMaskIntoConstraints = false

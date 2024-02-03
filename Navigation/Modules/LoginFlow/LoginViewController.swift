@@ -115,7 +115,7 @@ class LoginViewController: UIViewController {
         
     private func setupView() {
         self.navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
         title = "Authorization window".localized

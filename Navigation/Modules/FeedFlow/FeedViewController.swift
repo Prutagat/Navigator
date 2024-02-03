@@ -81,7 +81,7 @@ class FeedViewController: UIViewController {
     private func layout() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         title = "Feed".localized
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.addSubview(stackView)
         view.addSubview(statusLabel)
         view.addSubview(passwordTextField)
