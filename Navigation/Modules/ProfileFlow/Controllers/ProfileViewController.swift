@@ -49,9 +49,9 @@ class ProfileViewController: UIViewController {
     private func setupView() {
         title = "Profile".localized
         #if DEBUG
-            view.backgroundColor = .systemGray4
+            view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         #else
-            view.backgroundColor = .blue
+            view.backgroundColor = UIColor.createColor(lightMode: .blue, darkMode: .blue)
         #endif
     }
     

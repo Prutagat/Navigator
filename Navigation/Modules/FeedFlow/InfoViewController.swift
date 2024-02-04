@@ -46,7 +46,7 @@ class InfoViewController: UIViewController {
         getTitle()
         getOrbitalPeriod()
         getResidents()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.addSubview(actionButton)
         view.addSubview(taskFirst)
         view.addSubview(taskSecond)

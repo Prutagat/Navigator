@@ -19,7 +19,7 @@ final class CustomTextField: UITextField {
     }
     
     private func textFieldSetup(placeholderText: String, textDefault: String, isSecure: Bool) {
-        backgroundColor = .systemGray6
+        backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         clipsToBounds = true
         borderStyle = UITextField.BorderStyle.roundedRect
         autocapitalizationType = .none

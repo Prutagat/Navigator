@@ -18,7 +18,7 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         title = post.title
         let button = UIBarButtonItem(
             barButtonSystemItem: .add,

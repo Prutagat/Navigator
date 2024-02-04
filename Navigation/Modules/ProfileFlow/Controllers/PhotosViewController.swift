@@ -22,7 +22,7 @@ class PhotosViewController: UIViewController {
             collectionViewLayout: viewLayout
         )
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         
         collectionView.register(
             PhotosCollectionViewCell.self,
@@ -56,7 +56,7 @@ class PhotosViewController: UIViewController {
     
     private func setupView() {
         title = "Фото галерея"
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
     }
     
     private func setupCollectionView() {

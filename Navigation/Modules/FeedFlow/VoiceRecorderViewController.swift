@@ -41,7 +41,7 @@ final class VoiceRecorderViewController: UIViewController, AVAudioRecorderDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         title = "Voice recorder".localized
         audioPermission()
         setupUI()

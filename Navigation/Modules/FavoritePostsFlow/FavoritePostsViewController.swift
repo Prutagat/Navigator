@@ -64,7 +64,7 @@ final class FavoritePostsViewController: UIViewController {
     // MARK: - Private
     
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         navigationItem.rightBarButtonItems = getRightBarButtonItems()
     }
     
