@@ -1,10 +1,11 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, AuthorizationHelper {
     
     let coordinator: LoginCoordinator
     var loginDelegate: LoginViewControllerDelegate?
+    var authorizationService: AuthorizationService?
     var workItem: DispatchWorkItem?
     
     // MARK: - Subviews
@@ -82,6 +83,7 @@ class LoginViewController: UIViewController {
         setupView()
         addSubviews()
         setupConstraints()
+        setupAuthorizationService()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -135,6 +137,8 @@ class LoginViewController: UIViewController {
         contentView.addSubview(openMapButton)
         choosePasswordButton.isHidden = true
     }
+    
+    // MARK: - Constraints
     
     private func setupConstraints() {
         let safeAreaGuide = view.safeAreaLayoutGuide
@@ -210,77 +214,116 @@ class LoginViewController: UIViewController {
         notificationCenter.removeObserver(self)
     }
 
+    private func setupAuthorizationService() {
+        authorizationService = AuthorizationService()
+        authorizationService?.loginDelegate = loginDelegate
+        authorizationService?.authorizationHelper = self
+        authorizationService?.workItem = workItem
+    }
+    
+    // MARK: - AuthorizationHelper
+    
+    func showController(user: UserOld) {
+        coordinator.showTabBarController(user: user)
+    }
+    
+    func showAlert(isError: Bool, title: String, message: String) {
+        coordinator.presentAlert(title: title, message: message)
+        loginButton.isEnabled = isError
+    }
+    
+    func startChoosePassword() {
+        activityIndicator.startAnimating()
+        choosePasswordButton.isEnabled = false
+    }
+    
+    func stopChoosePassword(correctPassword: String) {
+        activityIndicator.stopAnimating()
+        passwordTextFields.text = correctPassword
+        passwordTextFields.isSecureTextEntry = false
+        activityIndicator.stopAnimating()
+        choosePasswordButton.isEnabled = true
+    }
+    
+    // MARK: - Authorization
+    
     private func logIn() {
-        let login = mailTextFields.text!
-        let password = passwordTextFields.text!
+        authorizationService?.logIn(login: mailTextFields.text!, password: passwordTextFields.text!)
         
-        loginDelegate?.checkCredentials(email: login, password: password) { [weak self] result in
-            switch result {
-            case .success(let user):
-                guard let profileUser = CurrentUserService().getUser() else { return }
-                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
-                profileUser.status = user.email
-                self?.coordinator.showTabBarController(user: profileUser)
-            case .failure(let failure):
-                let textError: String
-                switch failure {
-                case let .custom(text):
-                    textError = text
-                case .notAuthorized:
-                    textError = "the user is not logged in"
-                }
-                self?.coordinator.presentAlert(title: "Error", message: textError)
-                self?.loginButton.isEnabled = false
-            }
-        }
+//        let login = mailTextFields.text!
+//        let password = passwordTextFields.text!
+//        
+//        loginDelegate?.checkCredentials(email: login, password: password) { [weak self] result in
+//            switch result {
+//            case .success(let user):
+//                guard let profileUser = CurrentUserService().getUser() else { return }
+//                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
+//                profileUser.status = user.email
+//                self?.coordinator.showTabBarController(user: profileUser)
+//            case .failure(let failure):
+//                let textError: String
+//                switch failure {
+//                case let .custom(text):
+//                    textError = text
+//                case .notAuthorized:
+//                    textError = "the user is not logged in"
+//                }
+//                self?.coordinator.presentAlert(title: "Error", message: textError)
+//                self?.loginButton.isEnabled = false
+//            }
+//        }
     }
     
     private func signUp() {
-        let login = mailTextFields.text!
-        let password = passwordTextFields.text!
+        authorizationService?.signUp(login: mailTextFields.text!, password: passwordTextFields.text!)
         
-        loginDelegate?.signUp(email: login, password: password) { [weak self] result in
-            switch result {
-            case .success(let user):
-                guard let profileUser = CurrentUserService().getUser() else { return }
-                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
-                profileUser.status = user.email
-                self?.coordinator.showTabBarController(user: profileUser)
-                self?.coordinator.presentAlert(title: "Successfully", message: "You are registered")
-            case .failure(let failure):
-                let textError: String
-                switch failure {
-                case let .custom(text):
-                    textError = text
-                case .notAuthorized:
-                    textError = "The user is not logged in"
-                }
-                self?.coordinator.presentAlert(title: "Error", message: textError)
-                self?.signUpButton.isEnabled = false
-            }
-        }
+//        let login = mailTextFields.text!
+//        let password = passwordTextFields.text!
+//        
+//        loginDelegate?.signUp(email: login, password: password) { [weak self] result in
+//            switch result {
+//            case .success(let user):
+//                guard let profileUser = CurrentUserService().getUser() else { return }
+//                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
+//                profileUser.status = user.email
+//                self?.coordinator.showTabBarController(user: profileUser)
+//                self?.coordinator.presentAlert(title: "Successfully", message: "You are registered")
+//            case .failure(let failure):
+//                let textError: String
+//                switch failure {
+//                case let .custom(text):
+//                    textError = text
+//                case .notAuthorized:
+//                    textError = "The user is not logged in"
+//                }
+//                self?.coordinator.presentAlert(title: "Error", message: textError)
+//                self?.signUpButton.isEnabled = false
+//            }
+//        }
     }
     
     private func choosePassword() {
-        workItem?.cancel()
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let passwordToUnlock = String((0..<4).map { _ in letters.randomElement()! })
-        activityIndicator.startAnimating()
-        choosePasswordButton.isEnabled = false
+        authorizationService?.choosePassword()
         
-        let choosePassword = DispatchWorkItem {
-            let correctPassword = ChoosePasswordService.shared.bruteForce(passwordToUnlock: passwordToUnlock)
-            DispatchQueue.main.async { [weak self] in
-                self?.activityIndicator.stopAnimating()
-                self?.passwordTextFields.text = correctPassword
-                self?.passwordTextFields.isSecureTextEntry = false
-                self?.activityIndicator.stopAnimating()
-                self?.choosePasswordButton.isEnabled = true
-            }
-        }
-        
-        workItem = choosePassword
-        DispatchQueue.global().async(execute: choosePassword)
+//        workItem?.cancel()
+//        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+//        let passwordToUnlock = String((0..<4).map { _ in letters.randomElement()! })
+//        activityIndicator.startAnimating()
+//        choosePasswordButton.isEnabled = false
+//        
+//        let choosePassword = DispatchWorkItem {
+//            let correctPassword = ChoosePasswordService.shared.bruteForce(passwordToUnlock: passwordToUnlock)
+//            DispatchQueue.main.async { [weak self] in
+//                self?.activityIndicator.stopAnimating()
+//                self?.passwordTextFields.text = correctPassword
+//                self?.passwordTextFields.isSecureTextEntry = false
+//                self?.activityIndicator.stopAnimating()
+//                self?.choosePasswordButton.isEnabled = true
+//            }
+//        }
+//        
+//        workItem = choosePassword
+//        DispatchQueue.global().async(execute: choosePassword)
     }
 }
 

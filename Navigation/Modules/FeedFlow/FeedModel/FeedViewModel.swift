@@ -7,12 +7,12 @@
 
 import Foundation
 
+enum FeedViewModelAction {
+    case pushAction
+    case checkWordAtion
+}
+
 final class FeedViewModel {
-    
-    enum Action {
-        case pushAction
-        case checkWordAtion
-    }
     
     enum State {
         case pushButtonAction
@@ -28,7 +28,7 @@ final class FeedViewModel {
         }
     }
     
-    func changeAction(_ action: Action) {
+    func changeAction(_ action: FeedViewModelAction) {
         switch action {
         case .pushAction:
             state = .pushButtonAction
