@@ -31,6 +31,7 @@ final class CustomButton: UIButton {
     private func buttonSetup(title: String, cornerRadius: CGFloat, image: UIImage, action: Action) {
         setTitle(title.localized, for: .normal)
         if image != UIImage() {
+            setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
             setImage(image, for: .normal)
         } else {
             setBackgroundImage(UIImage(named:"blue_pixel"), for: .normal)
