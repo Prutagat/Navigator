@@ -88,7 +88,6 @@ class LoginViewController: UIViewController, AuthorizationHelper {
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
-        setupAuthorizationService()
     }
     
     required init?(coder: NSCoder) {
@@ -100,7 +99,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         setupView()
         addSubviews()
         setupConstraints()
-//       setupAuthorizationService()
+        setupAuthorizationService()
     }
     
     override func viewWillAppear(_ animated: Bool) {

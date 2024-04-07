@@ -11,6 +11,7 @@
 		810AB3AD2A60185500269411 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810AB3AC2A60185500269411 /* Checker.swift */; };
 		81161B712A2E74E600805507 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81161B702A2E74E600805507 /* LoginViewController.swift */; };
 		811B83D42A1E81470017B96A /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811B83D32A1E81470017B96A /* PostTableViewCell.swift */; };
+		8144E8472BC313EB006DB39B /* LocalNotificationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8144E8462BC313EB006DB39B /* LocalNotificationsService.swift */; };
 		81494C492A4CBADD00E4FE5E /* StorageService.docc in Sources */ = {isa = PBXBuildFile; fileRef = 81494C482A4CBADD00E4FE5E /* StorageService.docc */; };
 		81494C4F2A4CBADD00E4FE5E /* StorageService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81494C452A4CBADD00E4FE5E /* StorageService.framework */; };
 		81494C562A4CBADD00E4FE5E /* StorageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81494C552A4CBADD00E4FE5E /* StorageServiceTests.swift */; };
@@ -136,6 +137,7 @@
 		810AB3AC2A60185500269411 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 		81161B702A2E74E600805507 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		811B83D32A1E81470017B96A /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		8144E8462BC313EB006DB39B /* LocalNotificationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsService.swift; sourceTree = "<group>"; };
 		81494C452A4CBADD00E4FE5E /* StorageService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StorageService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81494C472A4CBADD00E4FE5E /* StorageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorageService.h; sourceTree = "<group>"; };
 		81494C482A4CBADD00E4FE5E /* StorageService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StorageService.docc; sourceTree = "<group>"; };
@@ -318,6 +320,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		8144E8452BC313DD006DB39B /* LocalNotificationsService */ = {
+			isa = PBXGroup;
+			children = (
+				8144E8462BC313EB006DB39B /* LocalNotificationsService.swift */,
+			);
+			path = LocalNotificationsService;
+			sourceTree = "<group>";
+		};
 		81494C462A4CBADD00E4FE5E /* StorageService */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +387,7 @@
 		8178CBC42AC48C7F009BFB4F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8144E8452BC313DD006DB39B /* LocalNotificationsService */,
 				81F981C72BC16EB300250C69 /* LocalAuthorizationService */,
 				8168E4032BB32CAC0055F02C /* AuthorizationService */,
 				8178CBC52AC48CD9009BFB4F /* NetworkService */,
@@ -767,6 +778,7 @@
 				81006D072B279A1F00C41D46 /* MapViewController.swift in Sources */,
 				81B89A982B054C770028A987 /* FavoritePostsCoordinator.swift in Sources */,
 				8178CBC12AC21B86009BFB4F /* VideoViewController.swift in Sources */,
+				8144E8472BC313EB006DB39B /* LocalNotificationsService.swift in Sources */,
 				8178CBC72AC48CFE009BFB4F /* NetworkService.swift in Sources */,
 				81BBF6F52A98E8F6006F5264 /* AppCoordinator.swift in Sources */,
 				811B83D42A1E81470017B96A /* PostTableViewCell.swift in Sources */,
