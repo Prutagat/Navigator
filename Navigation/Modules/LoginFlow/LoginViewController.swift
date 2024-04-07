@@ -6,6 +6,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
     let coordinator: LoginCoordinator
     var loginDelegate: LoginViewControllerDelegate?
     var authorizationService: AuthorizationService?
+    var localAuthorizationService: LocalAuthorizationService?
     var workItem: DispatchWorkItem?
     
     // MARK: - Subviews
@@ -51,6 +52,21 @@ class LoginViewController: UIViewController, AuthorizationHelper {
     private lazy var openMapButton = CustomButton(title: "Open Map", cornerRadius: 10) { [weak self] in
         self?.coordinator.presentMapViewController()
     }
+    private lazy var localAuthorization = CustomButton(title: " Авторизация по беометрии", cornerRadius: 10, image: getBiometryImage()) { [weak self] in
+        guard let self else { return }
+        self.localAuthorizationService?.authorizeIfPossible { result in
+            switch result {
+            case .success(let isCorrect):
+                self.mailTextFields.text = "a.v.golovanov@icloud.com"
+                self.passwordTextFields.text = "Ghbdtn1324"
+                self.logIn()
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.coordinator.presentAlert(title: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+    }
     
     private lazy var authorizationFields: UIStackView = { [unowned self] in
         let stackView = UIStackView()
@@ -72,6 +88,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
+        setupAuthorizationService()
     }
     
     required init?(coder: NSCoder) {
@@ -83,7 +100,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         setupView()
         addSubviews()
         setupConstraints()
-        setupAuthorizationService()
+//       setupAuthorizationService()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,7 +138,6 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         mailTextFields.delegate = self
         passwordTextFields.delegate = self
         title = "Authorization window".localized
-        
         passwordTextFields.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
     
@@ -135,6 +151,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         contentView.addSubview(choosePasswordButton)
         contentView.addSubview(activityIndicator)
         contentView.addSubview(openMapButton)
+        contentView.addSubview(localAuthorization)
         choosePasswordButton.isHidden = true
     }
     
@@ -174,12 +191,6 @@ class LoginViewController: UIViewController, AuthorizationHelper {
             signUpButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             signUpButton.heightAnchor.constraint(equalToConstant: 50),
             
-            choosePasswordButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 16),
-            choosePasswordButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            choosePasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            choosePasswordButton.heightAnchor.constraint(equalToConstant: 50),
-            choosePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
             activityIndicator.centerXAnchor.constraint(equalTo: passwordTextFields.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: passwordTextFields.centerYAnchor),
             
@@ -187,7 +198,17 @@ class LoginViewController: UIViewController, AuthorizationHelper {
             openMapButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             openMapButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             openMapButton.heightAnchor.constraint(equalToConstant: 50),
-            openMapButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            localAuthorization.topAnchor.constraint(equalTo: openMapButton.bottomAnchor, constant: 16),
+            localAuthorization.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            localAuthorization.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            localAuthorization.heightAnchor.constraint(equalToConstant: 50),
+            
+            choosePasswordButton.topAnchor.constraint(equalTo: localAuthorization.bottomAnchor, constant: 16),
+            choosePasswordButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            choosePasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            choosePasswordButton.heightAnchor.constraint(equalToConstant: 50),
+            choosePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     
@@ -219,6 +240,7 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         authorizationService?.loginDelegate = loginDelegate
         authorizationService?.authorizationHelper = self
         authorizationService?.workItem = workItem
+        localAuthorizationService = LocalAuthorizationService.shared
     }
     
     // MARK: - AuthorizationHelper
@@ -245,85 +267,33 @@ class LoginViewController: UIViewController, AuthorizationHelper {
         choosePasswordButton.isEnabled = true
     }
     
+    func getBiometryImage() -> UIImage {
+        switch (localAuthorizationService?.type()) {
+        case nil:
+            return UIImage()
+        case .touch:
+            return UIImage(systemName: "touchid")!.withTintColor(.black, renderingMode: .alwaysOriginal)
+        case .face:
+            return UIImage(systemName: "faceid")!.withTintColor(.black, renderingMode: .alwaysOriginal)
+        case .opticID:
+            return UIImage()
+        case .some(.none):
+            return UIImage()
+        }
+    }
+    
     // MARK: - Authorization
     
     private func logIn() {
         authorizationService?.logIn(login: mailTextFields.text!, password: passwordTextFields.text!)
-        
-//        let login = mailTextFields.text!
-//        let password = passwordTextFields.text!
-//        
-//        loginDelegate?.checkCredentials(email: login, password: password) { [weak self] result in
-//            switch result {
-//            case .success(let user):
-//                guard let profileUser = CurrentUserService().getUser() else { return }
-//                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
-//                profileUser.status = user.email
-//                self?.coordinator.showTabBarController(user: profileUser)
-//            case .failure(let failure):
-//                let textError: String
-//                switch failure {
-//                case let .custom(text):
-//                    textError = text
-//                case .notAuthorized:
-//                    textError = "the user is not logged in"
-//                }
-//                self?.coordinator.presentAlert(title: "Error", message: textError)
-//                self?.loginButton.isEnabled = false
-//            }
-//        }
     }
     
     private func signUp() {
         authorizationService?.signUp(login: mailTextFields.text!, password: passwordTextFields.text!)
-        
-//        let login = mailTextFields.text!
-//        let password = passwordTextFields.text!
-//        
-//        loginDelegate?.signUp(email: login, password: password) { [weak self] result in
-//            switch result {
-//            case .success(let user):
-//                guard let profileUser = CurrentUserService().getUser() else { return }
-//                profileUser.name = user.name.isEmpty ? profileUser.name : user.name
-//                profileUser.status = user.email
-//                self?.coordinator.showTabBarController(user: profileUser)
-//                self?.coordinator.presentAlert(title: "Successfully", message: "You are registered")
-//            case .failure(let failure):
-//                let textError: String
-//                switch failure {
-//                case let .custom(text):
-//                    textError = text
-//                case .notAuthorized:
-//                    textError = "The user is not logged in"
-//                }
-//                self?.coordinator.presentAlert(title: "Error", message: textError)
-//                self?.signUpButton.isEnabled = false
-//            }
-//        }
     }
     
     private func choosePassword() {
         authorizationService?.choosePassword()
-        
-//        workItem?.cancel()
-//        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-//        let passwordToUnlock = String((0..<4).map { _ in letters.randomElement()! })
-//        activityIndicator.startAnimating()
-//        choosePasswordButton.isEnabled = false
-//        
-//        let choosePassword = DispatchWorkItem {
-//            let correctPassword = ChoosePasswordService.shared.bruteForce(passwordToUnlock: passwordToUnlock)
-//            DispatchQueue.main.async { [weak self] in
-//                self?.activityIndicator.stopAnimating()
-//                self?.passwordTextFields.text = correctPassword
-//                self?.passwordTextFields.isSecureTextEntry = false
-//                self?.activityIndicator.stopAnimating()
-//                self?.choosePasswordButton.isEnabled = true
-//            }
-//        }
-//        
-//        workItem = choosePassword
-//        DispatchQueue.global().async(execute: choosePassword)
     }
 }
 

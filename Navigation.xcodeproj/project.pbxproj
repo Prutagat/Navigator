@@ -76,6 +76,7 @@
 		81F43DA22B66C2EB00E524CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81F43DA42B66C2EB00E524CC /* Localizable.strings */; };
 		81F43DA62B66C75700E524CC /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F43DA52B66C75700E524CC /* Localized.swift */; };
 		81F43DAA2B66E94E00E524CC /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 81F43DAC2B66E94E00E524CC /* Localizable.stringsdict */; };
+		81F981C92BC16EBF00250C69 /* LocalAuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F981C82BC16EBF00250C69 /* LocalAuthorizationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +199,7 @@
 		81F43DA52B66C75700E524CC /* Localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
 		81F43DAB2B66E94E00E524CC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		81F43DAD2B66E95100E524CC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		81F981C82BC16EBF00250C69 /* LocalAuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthorizationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +377,7 @@
 		8178CBC42AC48C7F009BFB4F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				81F981C72BC16EB300250C69 /* LocalAuthorizationService */,
 				8168E4032BB32CAC0055F02C /* AuthorizationService */,
 				8178CBC52AC48CD9009BFB4F /* NetworkService */,
 				810AB3AB2A60182D00269411 /* CheckerService */,
@@ -526,6 +529,14 @@
 				81F43DAC2B66E94E00E524CC /* Localizable.stringsdict */,
 			);
 			path = localized;
+			sourceTree = "<group>";
+		};
+		81F981C72BC16EB300250C69 /* LocalAuthorizationService */ = {
+			isa = PBXGroup;
+			children = (
+				81F981C82BC16EBF00250C69 /* LocalAuthorizationService.swift */,
+			);
+			path = LocalAuthorizationService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -764,6 +775,7 @@
 				81594A2C2A23DECB0084B4D8 /* Photos.swift in Sources */,
 				81B4822E2A02F2D4002E8FA3 /* InfoViewController.swift in Sources */,
 				8178CBB22AC20084009BFB4F /* AudioViewController.swift in Sources */,
+				81F981C92BC16EBF00250C69 /* LocalAuthorizationService.swift in Sources */,
 				810AB3AD2A60185500269411 /* Checker.swift in Sources */,
 				81161B712A2E74E600805507 /* LoginViewController.swift in Sources */,
 				81B482282A02E171002E8FA3 /* ProfileViewController.swift in Sources */,
@@ -1077,6 +1089,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "You can use Face ID / Touch ID";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Geolocation access is required to determine the user's location";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To record, you need to provide access to the microphone";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1110,6 +1123,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Navigation/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "You can use Face ID / Touch ID";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Geolocation access is required to determine the user's location";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "To record, you need to provide access to the microphone";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
