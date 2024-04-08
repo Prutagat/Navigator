@@ -85,8 +85,10 @@ final class FeedCoordinator: Coordinatable {
                 let okBtn = UIAlertAction(title: "Ok".localized, style: .default)
                 let cancelBtn = UIAlertAction(title: "Cancel".localized, style: .cancel)
                 alertController.addAction(okBtn)
-                alertController.addAction(cancelBtn)
-                navigationController.present(alertController, animated: true)
+//                alertController.addAction(cancelBtn)
+                DispatchQueue.main.async {
+                    self.navigationController.present(alertController, animated: true)
+                }
             }
         }
 }
