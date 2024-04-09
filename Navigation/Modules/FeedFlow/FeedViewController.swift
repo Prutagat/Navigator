@@ -5,32 +5,56 @@ class FeedViewController: UIViewController {
     
     let coordinator: FeedCoordinator
     private let viewModel: FeedViewModel
+    var localNotificationsService: LocalNotificationsService?
     
-    private lazy var audioButton = CustomButton(title: "Аудиопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var audioButton = CustomButton(title: "Audio Player", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.audio)
     }
-    private lazy var videoButton = CustomButton(title: "Видеопроигрыватель", cornerRadius: 10) { [weak self] in
+    private lazy var videoButton = CustomButton(title: "Video Player", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.video)
     }
-    private lazy var voiceRecorderButton = CustomButton(title: "Диктофон", cornerRadius: 10) { [weak self] in
+    private lazy var voiceRecorderButton = CustomButton(title: "Voice recorder", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.voiceRecorder)
     }
-    private lazy var infoButton = CustomButton(title: "Информация", cornerRadius: 10) { [weak self] in
+    private lazy var infoButton = CustomButton(title: "Information", cornerRadius: 10) { [weak self] in
         self?.coordinator.present(.info)
     }
     
-    private lazy var checkGuessButton = CustomButton(title: "Проверить", cornerRadius: 10) { [weak self] in
+    private lazy var checkGuessButton = CustomButton(title: "Check", cornerRadius: 10) { [weak self] in
         self?.viewModel.checkWord = (self?.passwordTextField.text)!
         self?.viewModel.changeAction(.checkWordAtion)
     }
-    private var passwordTextField = CustomTextField(placeholderText: "Пароль", text: "Donald")
+    
+    private lazy var setupNotification = CustomButton(title: "Setup notification", cornerRadius: 10) { [weak self] in
+        guard let self else { return }
+        self.localNotificationsService?.requestAuthorization(completion: { result in
+                switch result {
+                case .success(let isCorrect):
+                    if isCorrect {
+                        self.localNotificationsService?.authorized(completion: { result in
+                            if result {
+                                self.localNotificationsService?.removeAllDeliveredNotifications()
+                                self.localNotificationsService?.addCalendarNotification(id: "CalendarNotification", text: "Посмотрите последние обновления")
+                                self.coordinator.present(.attention("Уведомление установлено"))
+                            }
+                        })
+                    } else {
+                        self.coordinator.present(.attention("Нет прав на установку уведомлений"))
+                    }
+                case .failure(let error):
+                    self.coordinator.present(.attention(error.localizedDescription))
+                }
+        })
+    }
+    
+    private var passwordTextField = CustomTextField(placeholderText: "Password", text: "Donald")
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
     
     private var statusLabel: UILabel = {
         let lable = UILabel()
         lable.translatesAutoresizingMaskIntoConstraints = false
         lable.clipsToBounds = true
-        lable.text = "Корректно"
+        lable.text = "Correct".localized
         return lable
     }()
     
@@ -63,6 +87,7 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
         layout()
         bindViewModel()
+        setupServices()
     }
 
     private func bindViewModel() {
@@ -78,15 +103,20 @@ class FeedViewController: UIViewController {
         }
     }
     
+    private func setupServices() {
+        localNotificationsService = LocalNotificationsService.shared
+    }
+    
     private func layout() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        title = "Лента"
-        view.backgroundColor = .systemGray4
+        title = "Feed".localized
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.addSubview(stackView)
         view.addSubview(statusLabel)
         view.addSubview(passwordTextField)
         view.addSubview(checkGuessButton)
         view.addSubview(activityIndicator)
+        view.addSubview(setupNotification)
         stackView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-40)
@@ -108,6 +138,13 @@ class FeedViewController: UIViewController {
             make.trailing.equalTo(-16)
             make.height.equalTo(35)
         }
+        setupNotification.snp.makeConstraints { make in
+            make.top.equalTo(checkGuessButton.snp.bottom).offset(16)
+            make.leading.equalTo(16)
+            make.trailing.equalTo(-16)
+            make.height.equalTo(35)
+        }
+        
         activityIndicator.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
@@ -129,6 +166,6 @@ class FeedViewController: UIViewController {
         }
         
         statusLabel.textColor = isCorrect ? .green : .red
-        statusLabel.text = isCorrect ? "Верно" : "Не верно"
+        statusLabel.text = (isCorrect ? "True" : "Not true").localized
     }
 }

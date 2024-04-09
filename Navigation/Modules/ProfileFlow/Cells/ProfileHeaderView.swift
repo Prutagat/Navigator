@@ -14,7 +14,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarBackground: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.isHidden = true
         view.alpha = 0
         return view
@@ -56,7 +56,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         return label
     }()
     
-    private lazy var setStatusButton = CustomButton(title: "Установить статус", cornerRadius: 10) {  [weak self] in
+    private lazy var setStatusButton = CustomButton(title: "Set status", cornerRadius: 10) {  [weak self] in
         self?.setStatus()
     }
     
@@ -66,8 +66,8 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 12
         textField.clipsToBounds = true
-        textField.placeholder = "Введите статус"
-        textField.backgroundColor = .white
+        textField.placeholder = "Enter status".localized
+        textField.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +100,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     @objc func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text ?? "Ожидание..."
+        statusText = textField.text ?? "Wait...".localized
     }
     
     @objc private func didTapOnAvatar() {
@@ -221,12 +221,12 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         var changeTime = 3
         
         changeStatusTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-            self?.setStatusButton.setTitle("Статус изменится через \(changeTime). Отменить?", for: .normal)
+            self?.setStatusButton.setTitle("The status will change after".localized + " \(changeTime). " + "Cancel?", for: .normal)
             changeTime -= 1
             
             if changeTime == 0 {
                 self?.statusLabel.text = statusText
-                self?.setStatusButton.setTitle("Установить статус", for: .normal)
+                self?.setStatusButton.setTitle("Set status".localized, for: .normal)
                 timer.invalidate()
             }
         }
@@ -234,7 +234,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private func setStatus() {
         if changeStatusTimer.isValid {
-            setStatusButton.setTitle("Установить статус", for: .normal)
+            setStatusButton.setTitle("Set status".localized, for: .normal)
             changeStatusTimer.invalidate()
         } else {
             getStatus(textLabel: statusText) { [weak self] result in

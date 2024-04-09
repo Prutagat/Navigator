@@ -7,8 +7,8 @@ class InfoViewController: UIViewController {
     let coordinator: FeedCoordinator
     var residents: [Resident] = []
     
-    private lazy var actionButton = CustomButton(title: "Сообщить", cornerRadius: 10) { [weak self] in
-        self?.coordinator.present(.attention("Кря кря кря"))
+    private lazy var actionButton = CustomButton(title: "Inform", cornerRadius: 10) { [weak self] in
+        self?.coordinator.present(.attention("Quack quack quack"))
     }
     private let taskFirst: UILabel = {
         let lable = UILabel()
@@ -46,7 +46,7 @@ class InfoViewController: UIViewController {
         getTitle()
         getOrbitalPeriod()
         getResidents()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         view.addSubview(actionButton)
         view.addSubview(taskFirst)
         view.addSubview(taskSecond)
@@ -83,13 +83,13 @@ class InfoViewController: UIViewController {
     
     func getTitle() {
         NetworkService.requestUser(id: Int.random(in: 1..<51)) { [weak self] name in
-            self?.taskFirst.text = "Задание 1: \(name)"
+            self?.taskFirst.text = "Задание".localized + " 1: \(name)"
         }
     }
     
     func getOrbitalPeriod() {
         NetworkService.requestPlanet(id: Int.random(in: 1..<6)) { [weak self] planet in
-            self?.taskSecond.text = "Задание 2: Период вращения планеты \(planet.name) вокруг своей звезды - \(planet.rotationPeriod)"
+            self?.taskSecond.text = "Задание".localized + " 2: Период вращения планеты \(planet.name) вокруг своей звезды - \(planet.rotationPeriod)"
         }
     }
     

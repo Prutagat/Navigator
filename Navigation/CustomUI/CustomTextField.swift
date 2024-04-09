@@ -19,7 +19,7 @@ final class CustomTextField: UITextField {
     }
     
     private func textFieldSetup(placeholderText: String, textDefault: String, isSecure: Bool) {
-        backgroundColor = .systemGray6
+        backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         clipsToBounds = true
         borderStyle = UITextField.BorderStyle.roundedRect
         autocapitalizationType = .none
@@ -30,8 +30,8 @@ final class CustomTextField: UITextField {
         returnKeyType = UIReturnKeyType.done
         clearButtonMode = UITextField.ViewMode.whileEditing
         contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        placeholder = placeholderText
+        placeholder = placeholderText.localized
         isSecureTextEntry = isSecure
-        text = textDefault
+        text = textDefault.localized
     }
 }

@@ -1,6 +1,7 @@
 
 import UIKit
 import StorageService
+import MobileCoreServices
 
 class ProfileViewController: UIViewController {
     
@@ -47,11 +48,11 @@ class ProfileViewController: UIViewController {
     // MARK: - Private
     
     private func setupView() {
-        title = "Профиль"
+        title = "Profile".localized
         #if DEBUG
-            view.backgroundColor = .systemGray4
+            view.backgroundColor = UIColor.createColor(lightMode: .white, darkMode: .black)
         #else
-            view.backgroundColor = .blue
+            view.backgroundColor = UIColor.createColor(lightMode: .blue, darkMode: .blue)
         #endif
     }
     
@@ -66,6 +67,9 @@ class ProfileViewController: UIViewController {
         Self.postTableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeaderView")
         Self.postTableView.delegate = self
         Self.postTableView.dataSource = self
+        Self.postTableView.dragDelegate = self
+        Self.postTableView.dropDelegate = self
+        Self.postTableView.dragInteractionEnabled = true
     }
     
     private func setupConstraints() {
@@ -147,6 +151,74 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             coordinator.pushPhotos()
+        }
+    }
+}
+
+extension ProfileViewController: UITableViewDragDelegate {
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
+        let post = posts[indexPath.row]
+        let description = post.postDescription
+        let image = UIImage(named: post.nameImage)!
+        
+        let descriptionProvider = NSItemProvider(object: description as NSItemProviderWriting)
+        let imageProvider = NSItemProvider(object: image)
+        
+        return [UIDragItem(itemProvider: descriptionProvider), UIDragItem(itemProvider: imageProvider)]
+    }
+    
+}
+    
+extension ProfileViewController: UITableViewDropDelegate {
+    
+    func tableView(_ tableView: UITableView, canHandle session: any UIDropSession) -> Bool {
+        session.canLoadObjects(ofClass: UIImage.self) && session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: any UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        var dropProposal = UITableViewDropProposal(operation: .copy)
+        guard session.items.count == 1 else { return dropProposal }
+        
+        if tableView.hasActiveDrag {
+            if tableView.isEditing {
+                dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
+        } else {
+            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+        }
+        
+        return dropProposal
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
+        
+        var description = ""
+        var postImage = UIImage()
+        
+        coordinator.session.loadObjects(ofClass: NSString.self) { items in
+            guard let strings = items as? [String] else { return }
+            
+            for (index, string) in strings.enumerated() {
+                description = string
+                return
+            }
+        }
+        
+        coordinator.session.loadObjects(ofClass: UIImage.self) { items in
+            guard let images = items as? [UIImage] else { return }
+            
+            var indexPaths = [IndexPath]()
+            
+            for (index, image) in images.enumerated() {
+                postImage = image
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.posts.append(PostModel(postId: "6", favorite: false, author: "Drag&Drop", postDescription: description, nameImage: "Donald", likes: 0, views: 0))
+            tableView.reloadData()
         }
     }
 }

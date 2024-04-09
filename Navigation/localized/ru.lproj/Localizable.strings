@@ -1,0 +1,141 @@
+/* 
+  Localizable.strings
+  Navigation
+
+  Created by Алексей Голованов on 28.01.2024.
+  
+*/
+
+// LoginViewController
+
+"Mail" = "Почта";
+
+"Password" = "Пароль";
+
+"Login In" = "Войти";
+
+"Sing Up" = "Зарегистрироваться";
+
+"Choose Password" = "Подобрать пароль";
+
+"Open Map" = "Открыть карту";
+
+"Authorization window" = "Окно авторизации";
+
+"the user is not logged in" = "пользователь не авторизован";
+
+"Error" = "Ошибка";
+
+"Successfully" = "Успешно";
+
+"You are registered" = "Вы зарегистрированы";
+
+"The user is not logged in" = "Пользователь не авторизован";
+
+"Ok" = "Ок";
+
+// MapViewController
+
+"Scheme" = "Схема";
+
+"Satellite" = "Спутник";
+
+"Hybrid" = "Гибрид";
+
+"Build a route" = "Построить маршрут";
+
+// FeedViewController
+
+"Audio Player" = "Аудиопроигрыватель";
+
+"Video Player" = "Видеопроигрыватель";
+
+"Voice recorder" = "Диктофон";
+
+"Information" = "Информация";
+
+"Check" = "Проверить";
+
+"Setup notification" = "Установить уведомление";
+
+"Correct" = "Корректно";
+
+"Feed" = "Лента";
+
+"True" = "Верно";
+
+"Not true" = "Не верно";
+
+"Redefined" = "Переопределенный";
+
+"Attention" = "Внимание";
+
+"Cancel" = "Отмена";
+
+"Fill in the empty field!" = "Пустое поле, заполните!";
+
+"You didn't guess right!" = "Вы не угадали!";
+
+"Not found" = "Не найден";
+
+// InfoViewController
+
+"Inform" = "Сообщить";
+
+"Quack quack quack" = "Кря кря кря";
+
+"Task" = "Задание";
+
+// VoiceRecorderViewController
+
+" Record" = " Запись";
+
+" Play" = " Воспроизвести";
+
+"Couldn't get the recording, maybe you haven't recorded anything yet." = "Не удалось получить запись, возможно вы еще ничего не записали.";
+
+"Access to the microphone is allowed" = "Доступ к микрофону разрешен";
+
+"Microphone access is not allowed" = "Доступ к микрофону не разрешен";
+
+"The recording session could not be changed" = "Не удалось изменить сессию записи";
+
+" Stop recording" = " Остановить запись";
+
+"There were problems recording from the microphone. Try again" = "Возникли проблемы при записи с микрофона. Попробуйте снова";
+
+// FavoritePostsViewController
+
+"Favorite posts" = "Понравившиеся посты";
+
+"Delete" = "Удалить";
+
+// ProfileViewController
+
+"Profile" = "Профиль";
+
+// ProfileHeaderView
+
+"Set status" = "Установить статус";
+
+"Enter status" = "Введите статус";
+
+"Wait..." = "Ожидание...";
+
+"The status will change after" = "Статус изменится через";
+
+"Cancel?" = "Отменить?";
+
+// PhotosTableViewCell
+
+"Photos" = "Фотографии";
+
+// FavoritePostsCoordinator
+
+"Enter author" = "Введите автора";
+
+"Select" = "Отборать";
+
+"Selected author" = "Отбираемый автор";
+"" = "";
+"" = "";

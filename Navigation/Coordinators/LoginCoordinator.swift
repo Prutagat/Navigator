@@ -39,9 +39,14 @@ final class LoginCoordinator: Coordinatable {
     }
     
     func presentAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "Понял", style: .default)
+        let alertController = UIAlertController(title: title.localized, message: message.localized, preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "Ok".localized, style: .default)
         alertController.addAction(okBtn)
         navigationController.present(alertController, animated: true)
+    }
+    
+    func presentMapViewController() {
+        let mapViewController = MapViewController(coordinator: self)
+        navigationController.pushViewController(mapViewController, animated: true)
     }
 }

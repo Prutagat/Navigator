@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Navigation
+
+  Created by Алексей Голованов on 28.01.2024.
+  
+*/
+
+CFBundleName = "Навигатор";
+
+NSMicrophoneUsageDescription = "Для определния места пользователя требуется доступ к геолокации";
+
+NSLocationWhenInUseUsageDescription = "Для записи требуется предоставить доступ к микрофону";
